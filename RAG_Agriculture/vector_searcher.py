@@ -1,5 +1,6 @@
 """
 キーワード群からベクトル検索により関連情報を取得
+JSONでキーワードを受け取り、検索結果をJSONもしくはJSONのリストで返す
 """
 import polars as pl
 import json
