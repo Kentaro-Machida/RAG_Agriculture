@@ -1,5 +1,6 @@
 {
     "retrieve_llm":"gpt-3.5-turbo",
     "extract_keywords_prompt_path":"./prompts/extract_keywords_prompt.txt",
+    "generate_llm":"gpt-3.5-turbo",
     "generate_answer_prompt_path":"./prompts/generate_answer_prompt.txt"
 }
