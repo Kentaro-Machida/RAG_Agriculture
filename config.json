@@ -1,3 +1,4 @@
 {
-    "retrieve_llm":"gpt-3.5-turbo"
+    "retrieve_llm":"gpt-3.5-turbo",
+    "extract_keywords_prompt_path":"./prompts/extract_keywords_prompt.txt"
 }
