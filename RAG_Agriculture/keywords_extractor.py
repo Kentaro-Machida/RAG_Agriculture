@@ -1,8 +1,9 @@
 """
 ユーザーから入力された質問文からLLMでキーワードを抜き出すためのモジュール
 """
+import sys
 from openai import OpenAI
-from utils.data_load import load_text, str2json
+from .utils.data_load import load_text, str2json
 
 class DummyKeywordExtractor:
     def __init__(self):
@@ -35,7 +36,7 @@ class KeywordExtractor:
         self.retrieve_llm = retrieve_llm
 
     def extract_keywords(self, question: str) -> dict:
-        if self.retrieve_llm == 'GPT-3.5-turbo':
+        if self.retrieve_llm == 'gpt-3.5-turbo':
             client = OpenAI()
 
             completion = client.chat.completions.create(
@@ -49,6 +50,10 @@ class KeywordExtractor:
             answer = completion.choices[0].message.content
             extracted_keywords_dict = str2json(answer)
         
+        else:
+            print('Please set the correct LLM model to retrieve_llm in config file for keyword extraction.')
+            sys.exit()
+
         return extracted_keywords_dict
         
 
