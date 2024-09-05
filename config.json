@@ -4,5 +4,77 @@
     "generate_llm":"gpt-3.5-turbo",
     "generate_answer_prompt_path":"./prompts/generate_answer_prompt.txt",
     "embedding_model":"openai",
-    "search_num":5
+    "search_num":5,
+
+    "weaviate":{
+        "target_columns":{
+            "task_name": "作業名",
+            "purpose": "目的(ja)",
+            "action": "行為(ja)",
+            "target": "対象(ja)",
+            "sub_target": "副対象(ja)",
+            "location": "場所(ja)",
+            "method": "手段(ja)",
+            "material": "機資材(ja)",
+            "crop_example": "生産対象(ja)",
+            "season": "時期(ja)",
+            "condition": "作業条件(ja)"
+        },
+        "schema":{
+            "class": "Agriculuture",
+            "description": "農作業基本オントロジーに関するデータ。URL:https://cavoc.org/aao/ns/4/A1.html",
+            "vectorizer": "text2vec-openai",
+            "moduleConfig": {
+                "text2vec-contextionary": {
+                    "vectorizeClassName": true   
+                }
+            },
+            "properties":[
+                {
+                    "name": "task_name",
+                    "dataType": ["text"]
+                },
+                {
+                    "name": "purpose",
+                    "dataType": ["text"]
+                },
+                {
+                    "name": "action",
+                    "dataType": ["text"]
+                },
+                {
+                    "name": "target",
+                    "dataType": ["text"]
+                },
+                {
+                    "name": "sub_target",
+                    "dataType": ["text"]
+                },
+                {
+                    "name": "location",
+                    "dataType": ["text"]
+                },
+                {
+                    "name": "method",
+                    "dataType": ["text"]
+                },
+                {
+                    "name": "material",
+                    "dataType": ["text"]
+                },
+                {
+                    "name": "crop_example",
+                    "dataType": ["text"]
+                },
+                {
+                    "name": "season",
+                    "dataType": ["text"]
+                },
+                {
+                    "name": "condition",
+                    "dataType": ["text"]
+                }
+            ]
+        }
+    }
 }
