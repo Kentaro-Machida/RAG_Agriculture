@@ -38,7 +38,7 @@ def json2str(json_data:dict)->str:
     Json daa should be converted between <SOJ> and <EOJ>
     '''
 
-    json_str = '<SOJ>' + json.dumps(json_data) + '<EOJ>'
+    json_str = '<SOJ>' + json.dumps(json_data, ensure_ascii=False) + '<EOJ>'
     return json_str
 
 
