@@ -41,8 +41,9 @@ class DummyVectorSearcher:
 
 class VectorSearcher:
 
-    def __init__(self, embedding_model:str):
+    def __init__(self, embedding_model:str, connection_name:str):
         self.embedding_model = embedding_model
+        self.connection_name = connection_name
 
     def search(self, keywords:dict, n=2)->list:
         keywords_list = []
@@ -55,7 +56,7 @@ class VectorSearcher:
             try:
                 client = weaviate.connect_to_local(headers=headers)
 
-                agris = client.collections.get("Agriculture")
+                agris = client.collections.get(self.connection_name)
                 
                 response = agris.query.near_text(
                     query=str_keywords, limit=n, return_metadata=wq.MetadataQuery(distance=True)
