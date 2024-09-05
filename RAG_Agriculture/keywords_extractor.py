@@ -54,9 +54,11 @@ class KeywordExtractor:
             print('Please set the correct LLM model to retrieve_llm in config file for keyword extraction.')
             sys.exit()
 
+        # key の値で辞書をソート
+        extracted_keywords_dict = dict(sorted(extracted_keywords_dict.items(), key=lambda x: x[0]))
+
         return extracted_keywords_dict
         
-
 
 def test():
     # テキストデータの読み込み
