@@ -27,53 +27,108 @@
             "vectorizer": "text2vec-openai",
             "moduleConfig": {
                 "text2vec-contextionary": {
-                    "vectorizeClassName": true   
+                    "vectorizeClassName": true
                 }
             },
             "properties":[
                 {
                     "name": "task_name",
-                    "dataType": ["text"]
+                    "dataType": ["text"],
+                    "moduleConfig": {           
+                        "text2vec-contextionary": {
+                            "vectorizePropertyName": true
+                        }
+                    }
                 },
                 {
                     "name": "purpose",
-                    "dataType": ["text"]
+                    "dataType": ["text"],
+                    "moduleConfig": {           
+                        "text2vec-contextionary": {
+                            "vectorizePropertyName": true
+                        }
+                    }
                 },
                 {
                     "name": "action",
-                    "dataType": ["text"]
+                    "dataType": ["text"],
+                    "moduleConfig": {           
+                        "text2vec-contextionary": {
+                            "vectorizePropertyName": true
+                        }
+                    }
                 },
                 {
                     "name": "target",
-                    "dataType": ["text"]
+                    "dataType": ["text"],
+                    "moduleConfig": {           
+                        "text2vec-contextionary": {
+                            "vectorizePropertyName": true
+                        }
+                    }
                 },
                 {
                     "name": "sub_target",
-                    "dataType": ["text"]
+                    "dataType": ["text"],
+                    "moduleConfig": {           
+                        "text2vec-contextionary": {
+                            "vectorizePropertyName": true
+                        }
+                    }
                 },
                 {
                     "name": "location",
-                    "dataType": ["text"]
+                    "dataType": ["text"],
+                    "moduleConfig": {           
+                        "text2vec-contextionary": {
+                            "vectorizePropertyName": true
+                        }
+                    }
                 },
                 {
                     "name": "method",
-                    "dataType": ["text"]
+                    "dataType": ["text"],
+                    "moduleConfig": {           
+                        "text2vec-contextionary": {
+                            "vectorizePropertyName": true
+                        }
+                    }
                 },
                 {
                     "name": "material",
-                    "dataType": ["text"]
+                    "dataType": ["text"],
+                    "moduleConfig": {           
+                        "text2vec-contextionary": {
+                            "vectorizePropertyName": true
+                        }
+                    }
                 },
                 {
                     "name": "crop_example",
-                    "dataType": ["text"]
+                    "dataType": ["text"],
+                    "moduleConfig": {           
+                        "text2vec-contextionary": {
+                            "vectorizePropertyName": true
+                        }
+                    }
                 },
                 {
                     "name": "season",
-                    "dataType": ["text"]
+                    "dataType": ["text"],
+                    "moduleConfig": {           
+                        "text2vec-contextionary": {
+                            "vectorizePropertyName": true
+                        }
+                    }
                 },
                 {
                     "name": "condition",
-                    "dataType": ["text"]
+                    "dataType": ["text"],
+                    "moduleConfig": {           
+                        "text2vec-contextionary": {
+                            "vectorizePropertyName": true
+                        }
+                    }
                 }
             ]
         }
