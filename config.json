@@ -20,6 +20,7 @@
             "season": "時期(ja)",
             "condition": "作業条件(ja)"
         },
+        "data_path": "./datasets/aao_mini_sample.csv",
         "schema":{
             "class": "Agriculuture",
             "description": "農作業基本オントロジーに関するデータ。URL:https://cavoc.org/aao/ns/4/A1.html",
