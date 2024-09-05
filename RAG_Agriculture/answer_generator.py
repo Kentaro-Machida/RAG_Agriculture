@@ -3,7 +3,7 @@
 """
 import json
 from openai import OpenAI
-from utils.data_load import load_text, json2str
+from .utils.data_load import load_text, json2str
 
 class DummyAnswerGenerator:
     def __init__(self):

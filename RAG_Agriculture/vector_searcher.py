@@ -5,7 +5,7 @@ JSONでキーワードを受け取り、検索結果をJSONもしくはJSONの�
 import polars as pl
 import json
 import os
-from utils.data_load import load_json, json2str
+from .utils.data_load import load_json, json2str
 from openai import OpenAI
 import weaviate
 import weaviate.classes.config as wc
