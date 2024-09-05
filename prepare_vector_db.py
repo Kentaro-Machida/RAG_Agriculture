@@ -37,6 +37,7 @@ def main():
         collection = client.collections.get(config_dict['weaviate']['schema']['class'])
         df = pd.read_csv(config_dict['weaviate']['data_path'])
 
+        collection.batch.rate_limit(100)
         with collection.batch.dynamic() as batch:
             for i, batch_df in tqdm(df.iterrows()):
                 obj = {k:batch_df[v] for k,v in config_dict['weaviate']['target_columns'].items()}
