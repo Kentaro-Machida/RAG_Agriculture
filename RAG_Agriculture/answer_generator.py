@@ -2,6 +2,7 @@
 キーワード群からLLMを用いてユーザーへの回答を生成するモジュール
 """
 import json
+import sys
 from openai import OpenAI
 from .utils.data_load import load_text, json2str
 
@@ -25,7 +26,7 @@ class AnswerGenerator:
 
     def generate_answer(self, keywords: dict, question:str) -> str:
         keywords_str = json2str(keywords)
-        if self.generate_llm == 'GPT-3.5-turbo':
+        if self.generate_llm == 'gpt-3.5-turbo':
             client = OpenAI()
 
             completion = client.chat.completions.create(
@@ -38,7 +39,11 @@ class AnswerGenerator:
             )
 
             answer = completion.choices[0].message.content
-            return answer
+        else:
+            print('Please set the correct LLM model to generate_llm in config file for answer generation.')
+            sys.exit()
+        
+        return answer
 
 
 def test():
