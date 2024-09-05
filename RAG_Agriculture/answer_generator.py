@@ -56,7 +56,7 @@ def test():
 
     answer_generator = AnswerGenerator(
         generate_answer_prompt_path='./prompts/generate_answer_prompt.txt',
-        generate_llm='GPT-3.5-turbo'
+        generate_llm='gpt-3.5-turbo'
     )
     answer = answer_generator.generate_answer(keywords, question)
     print(answer)

@@ -64,7 +64,7 @@ def test():
     with open(text_path, 'r') as f:
         question = f.read()
         
-    keyword_extractor = KeywordExtractor(extract_keywords_prompt_path='./prompts/extract_keywords_prompt.txt',retrieve_llm='GPT-3.5-turbo')
+    keyword_extractor = KeywordExtractor(extract_keywords_prompt_path='./prompts/extract_keywords_prompt.txt',retrieve_llm='gpt-3.5-turbo')
     keywords = keyword_extractor.extract_keywords(question)
     print(type(keywords))
     print(keywords)
