@@ -24,7 +24,7 @@ def main():
     keywords = keyword_extractor.extract_keywords(question)
 
     # Search the knowledge graph
-    vector_searcher = vs.VectorSearcher(embedding_model)
+    vector_searcher = vs.VectorSearcher(embedding_model, connection_name=config['weaviate']['schema']['class'])
     keywords_list = vector_searcher.search(keywords, n=search_num)
 
     # Generate answer
@@ -48,10 +48,10 @@ def test():
     print("Keywords:", keywords)
 
     # Search the knowledge graph
-    vector_searcher = vs.VectorSearcher(embedding_model)
+    vector_searcher = vs.VectorSearcher(embedding_model, connection_name=config['weaviate']['schema']['class'])
     keywords_list = vector_searcher.search(keywords, n=search_num)
     print("-------------------")
-    print("Keywords list:", keywords_list)
+    print("Vector search reslts::", keywords_list)
 
     # Generate answer
     answer_generator = ag.AnswerGenerator(generate_answer_prompt_path, generate_llm)
