@@ -43,7 +43,13 @@ Retrieval augmented generation using LLM for Agriculture knowledge graph for Jap
             "properties":[
                 {
                     "name": "task_name",
-                    "dataType": ["text"]
+                    "dataType": ["text"],
+                    "moduleConfig": {
+                        "text2vec-contextionary": {
+                            # プロパティ名をベクトルの埋め込みに使用する場合true
+                            "vectorizePropertyName": true
+                        }
+                    }
                 },
                 {
                     "name": "purpose",

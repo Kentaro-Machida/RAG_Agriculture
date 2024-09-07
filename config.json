@@ -3,7 +3,7 @@
     "extract_keywords_prompt_path":"./prompts/extract_keywords_prompt.txt",
     "generate_llm":"gpt-3.5-turbo",
     "generate_answer_prompt_path":"./prompts/generate_answer_prompt.txt",
-    "embedding_model":"openai",
+    "embedding_model":"intfloat/multilingual-e5-large",
     "search_num":5,
 
     "weaviate":{
@@ -24,7 +24,7 @@
         "schema":{
             "class": "Agriculuture",
             "description": "農作業基本オントロジーに関するデータ。URL:https://cavoc.org/aao/ns/4/A1.html",
-            "vectorizer": "text2vec-openai",
+            "vectorizer": "none",
             "moduleConfig": {
                 "text2vec-contextionary": {
                     "vectorizeClassName": true
