@@ -1,6 +1,8 @@
 # RAG_Agriculture
 Retrieval augmented generation using LLM for Agriculture knowledge graph for Japanese.
 
+![Architecture Diagram](images/architecture_diagram.png)
+
 ## config.json
 さまざまなファイルの設定が書き込んであるファイル。`main.py`と`prepare_vector_db.py`で読み込む。
 
