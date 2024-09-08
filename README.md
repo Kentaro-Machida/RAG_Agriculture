@@ -1,7 +1,7 @@
 # RAG_Agriculture
 Retrieval augmented generation using LLM for Agriculture knowledge graph for Japanese.
 
-## Config.json
+## config.json
 さまざまなファイルの設定が書き込んであるファイル。`main.py`と`prepare_vector_db.py`で読み込む。
 
 ```json
@@ -61,6 +61,10 @@ Retrieval augmented generation using LLM for Agriculture knowledge graph for Jap
     }
 }
 ```
+それぞれのモデルの選択肢は以下の通り。
+* retrieve_llm: gpt-3.5-turbo
+* embedding_model: openai, intfloat/multilingual-e5-large
+* generate_llm: gpt-3.5-turbo
 
 ## 使い方
 全てベースディレクトリ（このREADME.md と同じディレクトリ）からの実行を前提とする。
@@ -81,9 +85,14 @@ docker compose up
 ```
 
 ### 農作業オントロジーデータをベクトルDBにセット
-以下のコマンドで、csv形式の農作業オントロジーデータをベクトルDBにセットする。
+以下のコマンドで、csv形式の農作業オントロジーデータをベクトルDBにセットする。OpenAIの埋め込みモデルを使用する場合は以下のスクリプトを実行。
 ```
 python prepare_vector_db.py
+```
+
+Hugging face で公開されているOSS埋め込みモデルを使用する際は以下のスクリプトを実行。
+```
+python prepare_vector_db_oss.py
 ```
 
 ### 質問システムの起動
@@ -110,3 +119,15 @@ RAG_Agriculuture ディレクトリの中にモジュールが格納されてい
 検索システムにより抜き出してきた情報と質問文を組み合わせて解答を生成するモジュール
 * 入力：質問文（str）、ヒットしたオブジェクトのリスト（list）
 * 出力：生成データ
+
+### utils
+モジュール共通で使用するクラスや関数をまとめて置いてある。
+
+## prompts
+各LLMに与えるための初期プロンプト。
+
+### extract_keywords_prompt.txt
+質問を入力とし、そこからキーワードを抽出するLLMのためのプロンプト。
+
+### generate_answer_prompt.txt
+RAGにより検索して返ってきたドキュメントに加えて、回答生成用のLLMに与えるためのプロンプト。
