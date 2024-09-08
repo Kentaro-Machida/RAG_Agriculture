@@ -4,9 +4,6 @@ Weaviateを使用して、ベクトルDBを作成するためのスクリプト�
 '''
 
 from transformers import AutoTokenizer, AutoModel
-import torch
-import torch.nn.functional as F
-from torch import Tensor
 from tqdm import tqdm
 import weaviate
 from weaviate.util import generate_uuid5
@@ -14,23 +11,7 @@ import pandas as pd
 
 from RAG_Agriculture.utils.data_load import load_json
 from RAG_Agriculture.utils.text_preprocess import mE5_preprocess, mE5_preprocess_instruct
-
-
-def average_pool(last_hidden_states: Tensor,
-                 attention_mask: Tensor) -> Tensor:
-    last_hidden = last_hidden_states.masked_fill(~attention_mask[..., None].bool(), 0.0)
-    return last_hidden.sum(dim=1) / attention_mask.sum(dim=1)[..., None]
-
-
-def text_embedding(text: list[str], model, tokenizer) -> Tensor:
-    inputs = tokenizer(text, return_tensors='pt', padding=True, truncation=True)
-    with torch.no_grad():
-        outputs = model(**inputs)
-    last_hidden_states = outputs.last_hidden_state
-    attention_mask = inputs['attention_mask']
-    embeddings = average_pool(last_hidden_states, attention_mask)
-    embeddings = F.normalize(embeddings, p=2, dim=1)
-    return embeddings
+from RAG_Agriculture.utils.embedding_process import text_embedding
 
 
 def main():
@@ -42,6 +23,7 @@ def main():
     target_columns = list(config_dict['weaviate']['target_columns'].values())
     target_columns.sort()
     df.fillna('', inplace=True)
+    # 対称の列の要素を列名と共に一つの文字列に結合
     df['joined'] = df.apply(
         lambda row: ', '.join([mE5_preprocess(f'{col}: {row[col]}'.replace('(ja)', ''), 'answer')
                             for col in target_columns]), axis=1)
@@ -77,18 +59,28 @@ def main():
         client.close()
 
 
+def search_test():
+    config_dict = load_json('./config.json')
+    embedding_model = config_dict['embedding_model']
+    tokenizer = AutoTokenizer.from_pretrained(embedding_model)
+    model = AutoModel.from_pretrained(embedding_model)
+    model.eval()
+    client = weaviate.connect_to_local()
+    collection = client.collections.get(config_dict['weaviate']['schema']['class'])
+    print(f'------connected to {config_dict['weaviate']['schema']['class']}')
+    text2 = "query: ACTION:  CONDITION:  CROP_EXAMPLE: イネ LOCATION: 水田 MATERIAL:  METHOD:  PURPOSE: 発芽安定化 REGION:  SUBTARGET:  TARGET: 種子 TASK_NAME:  URI:  ？"
+    embeddings2 = text_embedding([text2], model, tokenizer).detach().numpy()[0]
+    print(len(embeddings2))
+
+    # Weaviateのクエリ機能を使用して、特定のエンベディングに最も近いテキストデータを検索します。
+    query_result = collection.query.near_vector(
+        near_vector=embeddings2, limit=1
+    )
+    client.close()
+
+    # 検索結果を出力します。この結果には、クエリに最も近いテキストデータが含まれます。
+    print(query_result)
+
 if __name__ == '__main__':
     main()
-
-# def get_test():
-#     collection = client.collections.get(config_dict['weaviate']['schema']['class'])
-#     text2 = "鉄コーティングとはなんですか？"
-#     embeddings2 = text_embedding([text2], model, tokenizer).detach().numpy()[0]
-
-#     # Weaviateのクエリ機能を使用して、特定のエンベディングに最も近いテキストデータを検索します。
-#     query_result = collection.query.near_vector(
-#         near_vector=embeddings2, limit=1
-#     )
-
-#     # 検索結果を出力します。この結果には、クエリに最も近いテキストデータが含まれます。
-#     print(query_result)
+    # search_test()
