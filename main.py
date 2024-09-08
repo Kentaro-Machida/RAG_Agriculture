@@ -45,19 +45,23 @@ def test():
     keyword_extractor = ke.KeywordExtractor(extract_keywords_prompt_path, retrieve_llm)
     keywords = keyword_extractor.extract_keywords(question)
     print("-------------------")
-    print("Keywords:", keywords)
+    print("Key words extraction model: ",retrieve_llm)
+    print("Extracted keywords:", keywords)
 
     # Search the knowledge graph
     vector_searcher = vs.VectorSearcher(embedding_model, connection_name=config['weaviate']['schema']['class'])
-    keywords_list = vector_searcher.search(keywords, n=search_num)
     print("-------------------")
-    print("Vector search reslts::", keywords_list)
+    print("Embedding model:", embedding_model)
+    print("Connection name:", config['weaviate']['schema']['class'])
+    keywords_list = vector_searcher.search(keywords, n=search_num)
+    print("Vector search reslts:", keywords_list)
 
     # Generate answer
     answer_generator = ag.AnswerGenerator(generate_answer_prompt_path, generate_llm)
     answer = answer_generator.generate_answer(keywords_list, question)
 
     print("-------------------")
+    print("Answer generation model:", generate_llm)
     print("Answer:", answer)
     
 
