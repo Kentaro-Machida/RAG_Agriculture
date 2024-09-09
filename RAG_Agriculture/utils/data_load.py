@@ -1,4 +1,5 @@
 import json
+import sys
 
 def load_text(text_path:str)->str:
     '''
@@ -27,8 +28,13 @@ def str2json(json_str:str)->dict:
     '''
 
     # <SOJ>と<>EOJ>で囲まれた部分を取り出す
-    json_str = json_str.split('<SOJ>')[-1].split('<EOJ>')[0]
-    json_data = json.loads(json_str)
+    try:
+        json_str = json_str.split('<SOJ>')[-1].split('<EOJ>')[0]
+        json_data = json.loads(json_str)
+    except:
+        print('Error: Failed to convert string to json in str2json function in data_load.py')
+        print(f'json_str: {json_str}')
+        sys.exit()
     return json_data
 
 
