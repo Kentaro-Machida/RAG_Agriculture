@@ -22,14 +22,43 @@ def main():
     # Input text by conversation system
     question = input("Please input your question: ")
     lang = detect(question)
+    if lang != 'ja':
+        extract_keywords_prompt_path = add_lang_to_promptpath(extract_keywords_prompt_path, lang)
+        generate_answer_prompt_path = add_lang_to_promptpath(generate_answer_prompt_path, lang)
 
     # Extract keywords from the question
     keyword_extractor = ke.KeywordExtractor(extract_keywords_prompt_path, retrieve_llm)
     keywords = keyword_extractor.extract_keywords(question)
 
+    # Translate keywords if the language is not Japanese
+    if lang != 'ja':
+        print(f"Translate from {lang} to ja.")
+        url = config['to_ja_translator_url']
+        headers = {'Content-Type': 'application/json'}
+        response = requests.post(url, headers=headers, json={"keywords": keywords, "lang": lang})
+        if response.status_code == 200:
+            keywords = response.json()  # JSONレスポンスを辞書型として取得
+            print(keywords)
+        else:
+            print(f"Error: {response.status_code}")
+
     # Search the knowledge graph
     vector_searcher = vs.VectorSearcher(embedding_model, connection_name=config['weaviate']['schema']['class'])
     keywords_list = vector_searcher.search(keywords, n=search_num)
+
+    # Translate keywords back to the original language
+    if lang != 'ja':
+        print("-------------------")
+        print(f"Translate from ja to {lang}.")
+        url = config['from_ja_translator_url']
+        headers = {'Content-Type': 'application/json'}
+        for i, keywords in enumerate(keywords_list):
+            response = requests.post(url, headers=headers, json={"keywords": keywords, "lang": lang})
+            if response.status_code == 200:
+                trans_keywords = response.json()  # JSONレスポンスを辞書型として取得
+                keywords_list[i] = trans_keywords
+            else:
+                print(f"Error: {response.status_code}")    
 
     # Generate answer
     answer_generator = ag.AnswerGenerator(generate_answer_prompt_path, generate_llm)
