@@ -166,3 +166,4 @@ datasets/
 tests/
 playgraunds/
 config_backup.json
+.transenv
