@@ -97,6 +97,12 @@ Hugging face で公開されているOSS埋め込みモデルを使用する際�
 python prepare_vector_db_oss.py
 ```
 
+### translatorの起動
+日本語以外での検索を可能にするためのtranslaatorを起動する必要がある。以下のコマンドでflaskによるサーバーが立ち上がる。中身は、googletransという無料の翻訳機。
+```
+python RAG_Agriculture/translator.py
+```
+
 ### 質問システムの起動
 以下のコマンドで、RAG質問システムが起動
 
@@ -130,6 +136,16 @@ RAG_Agriculuture ディレクトリの中にモジュールが格納されてい
 
 ### extract_keywords_prompt.txt
 質問を入力とし、そこからキーワードを抽出するLLMのためのプロンプト。
+日本語で書かれている。
 
 ### generate_answer_prompt.txt
-RAGにより検索して返ってきたドキュメントに加えて、回答生成用のLLMに与えるためのプロンプト。
+RAGにより検索して返ってきたドキュメントに加えて、回答生成用のLLMに与えるためのプロンプト。日本語で書かれている。
+
+### extract_keywords_prompt_{language}.txt, generate_answer_prompt_{language}.txt
+上記2プロンプトの日本語以外のもの。
+{language}語で書かれている。言語の命名規則に従わないとエラーが発生。
+命名規則はgoogletransライブラリの言語の表記に準拠。
+日本語で使用する分には作成する必要はない。
+* 英語：{language}=en
+* ベトナム語：{language}=vi
+

@@ -1,6 +1,7 @@
 from flask import Flask, request
 import json
 from utils.translate_module import  translate_to_japanese, translate_to_target_language
+from utils.data_load import load_json
 
 app = Flask(__name__)
 
