@@ -36,7 +36,7 @@ class KeywordExtractor:
         self.retrieve_llm = retrieve_llm
 
     def extract_keywords(self, question: str) -> dict:
-        if self.retrieve_llm == 'gpt-3.5-turbo':
+        if self.retrieve_llm == 'gpt-3.5-turbo' or self.retrieve_llm == 'gpt-4o':
             client = OpenAI()
 
             completion = client.chat.completions.create(

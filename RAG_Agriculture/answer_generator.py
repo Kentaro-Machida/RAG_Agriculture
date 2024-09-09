@@ -26,11 +26,11 @@ class AnswerGenerator:
 
     def generate_answer(self, keywords: dict, question:str) -> str:
         keywords_str = json2str(keywords)
-        if self.generate_llm == 'gpt-3.5-turbo':
+        if self.generate_llm == 'gpt-3.5-turbo' or 'gpt-4o':
             client = OpenAI()
 
             completion = client.chat.completions.create(
-            model="gpt-3.5-turbo",
+            model=self.generate_llm,
             messages=[
                 {"role": "system", "content": self.generate_answer_prompt},
                 {"role": "user", "content": keywords_str},

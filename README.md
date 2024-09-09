@@ -64,9 +64,9 @@ Retrieval augmented generation using LLM for Agriculture knowledge graph for Jap
 }
 ```
 それぞれのモデルの選択肢は以下の通り。
-* retrieve_llm: gpt-3.5-turbo
+* retrieve_llm: gpt-3.5-turbo, gpt-4o
 * embedding_model: openai, intfloat/multilingual-e5-large
-* generate_llm: gpt-3.5-turbo
+* generate_llm: gpt-3.5-turbo, gpt-4o
 
 ## 使い方
 全てベースディレクトリ（このREADME.md と同じディレクトリ）からの実行を前提とする。
