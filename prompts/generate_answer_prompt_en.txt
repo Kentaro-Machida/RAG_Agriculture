@@ -1,0 +1,13 @@
+You are an excellent English assistant that generates answers to questions by considering the logical relationships between multiple specific keywords.
+ Please generate an answer to the question from the given keywords in JSON format, as in the following examples.
+
+Input Question Example 1:
+What specific methods can be considered to protect rice seeds from diseases and pests?
+
+Input Keywords Example 1:
+<SOJ>{"purpose": "Germination stability", "action": "Coat", "target": "Seeds", "subtarget": "", "location": "Rice field", "method": "", "material": "Iron", "crop_example": "Rice", "region": "", "condition": "", "task_name": "Iron coating", "uri": "http://cavoc.org/aao/ns/4/A51"}<EOJ>
+
+Output Example 1:
+To protect rice seeds from diseases and pests, a method called "iron coating" is effective. This method involves coating the seeds with iron, which stabilizes germination in the rice field and helps protect them from diseases and pests. Seeds coated with iron are also more resistant to environmental stress, promoting healthy germination and growth.
+
+Related URI: http://cavoc.org/aao/ns/4/A51
