@@ -42,3 +42,18 @@ def json2str(json_data:dict)->str:
     return json_str
 
 
+def add_lang_to_promptpath(prompt_path: str, lang: str)->str:
+    # 拡張子 .txt がファイルパスの最後にあるかを確認
+    print(type(prompt_path))
+    if prompt_path.endswith('.txt'):
+        # .txt の前の部分と、後ろの拡張子部分に分ける
+        base_path = prompt_path[:-4]  # .txt の前の部分
+        extension = prompt_path[-4:]  # ".txt"
+        
+        # 新しいファイル名を作成
+        new_prompt_path = f"{base_path}_{lang}{extension}"
+        
+        return new_prompt_path
+    else:
+        # .txt で終わっていない場合は、そのまま返す
+        return prompt_path
