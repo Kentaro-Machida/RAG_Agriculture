@@ -9,6 +9,7 @@
     "to_ja_translator_url":"http://localhost:5001/translate/to_ja",
 
     "weaviate":{
+        "index_strategy":"all",
         "target_columns":{
             "task_name": "作業名",
             "purpose": "目的(ja)",

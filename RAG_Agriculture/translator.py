@@ -35,8 +35,6 @@ def translate_from_ja():
     question_lang = posted_json['lang']
 
     # キーワードの結合して言語検出（今回は日本語なのでスキップしても良い）
-    src_lang = 'ja'
-    
     print('Translate from Japanese to:', question_lang)
     
     # 日本語 → 他言語への翻訳
