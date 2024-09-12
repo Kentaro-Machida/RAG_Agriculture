@@ -9,18 +9,39 @@
     "to_ja_translator_url":"http://localhost:5001/translate/to_ja",
 
     "weaviate":{
-        "target_columns":{
+        "vector_columns":{
             "task_name": "作業名",
             "purpose": "目的(ja)",
             "action": "行為(ja)",
             "target": "対象(ja)",
             "sub_target": "副対象(ja)",
+            "crop_example": "生産対象(ja)"
+        },
+        "rule_based_columns":{
+            "first": "第1階層",
+            "second": "第2階層",
+            "third": "第3階層",
+            "fourth": "第4階層",
+            "fifth": "第5階層",
+            "sixth": "第6階層",
+            "seventh": "第7階層",
+            "eighth": "第8階層",
+            "ninth": "第9階層",
+            "tenth": "第10階層",
             "location": "場所(ja)",
             "method": "手段(ja)",
-            "material": "機資材(ja)",
-            "crop_example": "生産対象(ja)",
-            "season": "時期(ja)",
-            "condition": "作業条件(ja)"
+            "material": "機資材(ja)"
+        },
+        "prompt_only_columns":{
+            "aao_id": "ID",
+            "reading": "よみ",
+            "notation": "|表記|",
+            "english": "英名",
+            "concept": "多義的概念",
+            "condition": "作業条件(ja)",
+            "agrovoc": "agrovoc",
+            "naropedia": "naropedia",
+            "wikipedia": "wikipedia"
         },
         "data_path": "./datasets/aao_ver_4_05.csv",
         "schema":{
@@ -125,6 +146,159 @@
                 },
                 {
                     "name": "condition",
+                    "dataType": ["text"],
+                    "moduleConfig": {           
+                        "text2vec-contextionary": {
+                            "vectorizePropertyName": true
+                        }
+                    }
+                },
+                {
+                    "name": "first",
+                    "dataType": ["text"],
+                    "moduleConfig": {           
+                        "text2vec-contextionary": {
+                            "vectorizePropertyName": true
+                        }
+                    }
+                },
+                {
+                    "name": "second",
+                    "dataType": ["text"],
+                    "moduleConfig": {           
+                        "text2vec-contextionary": {
+                            "vectorizePropertyName": true
+                        }
+                    }
+                },
+                {
+                    "name": "third",
+                    "dataType": ["text"],
+                    "moduleConfig": {           
+                        "text2vec-contextionary": {
+                            "vectorizePropertyName": true
+                        }
+                    }
+                },
+                {
+                    "name": "fourth",
+                    "dataType": ["text"],
+                    "moduleConfig": {           
+                        "text2vec-contextionary": {
+                            "vectorizePropertyName": true
+                        }
+                    }
+                },
+                {
+                    "name": "fifth",
+                    "dataType": ["text"],
+                    "moduleConfig": {           
+                        "text2vec-contextionary": {
+                            "vectorizePropertyName": true
+                        }
+                    }
+                },
+                {
+                    "name": "sixth",
+                    "dataType": ["text"],
+                    "moduleConfig": {           
+                        "text2vec-contextionary": {
+                            "vectorizePropertyName": true
+                        }
+                    }
+                },
+                {
+                    "name": "seventh",
+                    "dataType": ["text"],
+                    "moduleConfig": {           
+                        "text2vec-contextionary": {
+                            "vectorizePropertyName": true
+                        }
+                    }
+                },
+                {
+                    "name": "eighth",
+                    "dataType": ["text"],
+                    "moduleConfig": {           
+                        "text2vec-contextionary": {
+                            "vectorizePropertyName": true
+                        }
+                    }
+                },
+                {
+                    "name": "ninth",
+                    "dataType": ["text"],
+                    "moduleConfig": {           
+                        "text2vec-contextionary": {
+                            "vectorizePropertyName": true
+                        }
+                    }
+                },
+                {
+                    "name": "tenth",
+                    "dataType": ["text"],
+                    "moduleConfig": {           
+                        "text2vec-contextionary": {
+                            "vectorizePropertyName": true
+                        }
+                    }
+                },
+                {
+                    "name": "aao_id",
+                    "dataType": ["text"],
+                    "moduleConfig": {           
+                        "text2vec-contextionary": {
+                            "vectorizePropertyName": true
+                        }
+                    }
+                },
+                {
+                    "name": "notation",
+                    "dataType": ["text"],
+                    "moduleConfig": {           
+                        "text2vec-contextionary": {
+                            "vectorizePropertyName": true
+                        }
+                    }
+                },
+                {
+                    "name": "english",
+                    "dataType": ["text"],
+                    "moduleConfig": {           
+                        "text2vec-contextionary": {
+                            "vectorizePropertyName": true
+                        }
+                    }
+                },
+                {
+                    "name": "consept",
+                    "dataType": ["text"],
+                    "moduleConfig": {           
+                        "text2vec-contextionary": {
+                            "vectorizePropertyName": true
+                        }
+                    }
+                },
+                {
+                    "name": "agrovoc",
+                    "dataType": ["text"],
+                    "moduleConfig": {           
+                        "text2vec-contextionary": {
+                            "vectorizePropertyName": true
+                        }
+                    }
+                },
+                {
+                    "name": "naropedia",
+                    "dataType": ["text"],
+                    "moduleConfig": {           
+                        "text2vec-contextionary": {
+                            "vectorizePropertyName": true
+                        }
+                    }
+                },
+                {
+                    "name": "wikipedia",
                     "dataType": ["text"],
                     "moduleConfig": {           
                         "text2vec-contextionary": {

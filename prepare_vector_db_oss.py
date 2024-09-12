@@ -19,13 +19,13 @@ def joined_embedding(config_dict:dict):
     df = pd.read_csv(config_dict['weaviate']['data_path'])
 
     # Data frame の要素を全て接続し1つの文字列にする
-    target_columns = list(config_dict['weaviate']['target_columns'].values())
-    target_columns.sort()
+    vector_columns = list(config_dict['weaviate']['vector_columns'].values())
+    vector_columns.sort()
     df.fillna('', inplace=True)
     # 対称の列の要素を列名と共に一つの文字列に結合
     df['joined'] = df.apply(
         lambda row: ', '.join([mE5_preprocess(f'{col}: {row[col]}'.replace('(ja)', ''), 'answer')
-                            for col in target_columns]), axis=1)
+                            for col in vector_columns]), axis=1)
 
     # Huggingface のモデルを使用してベクトルを取得
     tokenizer = AutoTokenizer.from_pretrained(embedding_model)
@@ -33,6 +33,12 @@ def joined_embedding(config_dict:dict):
     model.eval()
 
     embeddings = text_embedding(df['joined'].tolist(), model, tokenizer).detach().numpy()
+
+    # weaviate にアップロードするカラム辞書を作成
+    vector_columns = config_dict['weaviate']['vector_columns']
+    rule_based_columns = config_dict['weaviate']['rule_based_columns']
+    prompt_only_columns = config_dict['weaviate']['prompt_only_columns']
+    weaviate_columns = {**vector_columns, **rule_based_columns, **prompt_only_columns}
 
     try:
         client = weaviate.connect_to_local()
@@ -43,7 +49,7 @@ def joined_embedding(config_dict:dict):
 
         with collection.batch.dynamic() as batch:
             for i, batch_df in tqdm(df.iterrows()):
-                obj = {k:batch_df[v] for k,v in config_dict['weaviate']['target_columns'].items()}
+                obj = {k:batch_df[v] for k,v in weaviate_columns.items()}
 
                 batch.add_object(
                     properties=obj,
@@ -59,7 +65,7 @@ def joined_embedding(config_dict:dict):
 
 
 
-def all_search_test():
+def search_test():
     config_dict = load_json('./config.json')
     embedding_model = config_dict['embedding_model']
     tokenizer = AutoTokenizer.from_pretrained(embedding_model)
@@ -84,5 +90,5 @@ def all_search_test():
 if __name__ == '__main__':
     config_dict = load_json('./config.json')
     joined_embedding(config_dict)
-    # search_test()
+    search_test()
 
