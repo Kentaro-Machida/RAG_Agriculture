@@ -30,6 +30,12 @@ def main():
     print('------connected------')
 
     try:
+        # weaviate にアップロードするカラム辞書を作成
+        vector_columns = config_dict['weaviate']['vector_columns']
+        rule_based_columns = config_dict['weaviate']['rule_based_columns']
+        prompt_only_columns = config_dict['weaviate']['prompt_only_columns']
+        weaviate_columns = {**vector_columns, **rule_based_columns, **prompt_only_columns}
+
         client.collections.delete(config_dict['weaviate']['schema']['class'])
         client.collections.create_from_dict(config_dict['weaviate']['schema'])
         print('------collection created------')
@@ -40,7 +46,7 @@ def main():
         collection.batch.rate_limit(100)
         with collection.batch.dynamic() as batch:
             for i, batch_df in tqdm(df.iterrows()):
-                obj = {k:batch_df[v] for k,v in config_dict['weaviate']['target_columns'].items()}
+                obj = {k:batch_df[v] for k,v in weaviate_columns.items()}
 
                 batch.add_object(
                     properties=obj,
