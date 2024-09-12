@@ -8,6 +8,7 @@ Retrieval augmented generation using LLM for Agriculture knowledge graph for Jap
 
 ```json
 {
+    "index_strategy":"all",  # 全てのカラムをindexとして埋め込む"all"もしくは、一部のカラムを埋め込む"sep"
     "retrieve_llm":"gpt-3.5-turbo",  # 質問文からキーワードを抜き出すLLM
     "extract_keywords_prompt_path":"./prompts/extract_keywords_prompt.txt",  # キーワードを抜き出すLLMの初期プロンプトへのパス
     "generate_llm":"gpt-3.5-turbo",  # 検索結果キーワードと質問文から解答を生成するLLM

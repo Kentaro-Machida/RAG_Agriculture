@@ -14,7 +14,7 @@ from RAG_Agriculture.utils.text_preprocess import mE5_preprocess, mE5_preprocess
 from RAG_Agriculture.utils.embedding_process import text_embedding
 
 
-def all_embedding(config_dict:dict):
+def joined_embedding(config_dict:dict):
     embedding_model = config_dict['embedding_model']
     df = pd.read_csv(config_dict['weaviate']['data_path'])
 
@@ -58,11 +58,8 @@ def all_embedding(config_dict:dict):
         client.close()
 
 
-def separate_embedding(config_dict:dict):
 
-    return
-
-def search_test():
+def all_search_test():
     config_dict = load_json('./config.json')
     embedding_model = config_dict['embedding_model']
     tokenizer = AutoTokenizer.from_pretrained(embedding_model)
@@ -86,13 +83,6 @@ def search_test():
 
 if __name__ == '__main__':
     config_dict = load_json('./config.json')
-    if config_dict['weaviate']['index_strategy'] == 'all':
-        all_embedding(config_dict)
-    elif cofing_dict['weaviate']['index_strategy'] == 'sep':
-        separate_embedding(config_dict)
-    else:
-        print('Invalid embedding method. Please check index_strategy in the config file.')
-        print('index_strategy should be all or sep')
-        sys.exit()
+    joined_embedding(config_dict)
     # search_test()
 
