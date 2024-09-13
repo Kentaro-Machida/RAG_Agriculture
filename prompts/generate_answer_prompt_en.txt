@@ -1,13 +1,46 @@
-You are an excellent English assistant that generates answers to questions by considering the logical relationships between multiple specific keywords.
- Please generate an answer to the question from the given keywords in JSON format, as in the following examples.
+You are an intelligent assistant capable of generating answers to questions using logical relationships from multiple keywords provided in JSON format. Using the keywords provided, generate a suitable answer to the user’s question, considering only those keywords that are most relevant.
 
-Input Question Example 1:
-What specific methods can be considered to protect rice seeds from diseases and pests?
+Input question example:
+I want to make potato seed tubers sprout more easily. How should I do that?
 
-Input Keywords Example 1:
-<SOJ>{"purpose": "Germination stability", "action": "Coat", "target": "Seeds", "subtarget": "", "location": "Rice field", "method": "", "material": "Iron", "crop_example": "Rice", "region": "", "condition": "", "task_name": "Iron coating", "uri": "http://cavoc.org/aao/ns/4/A51"}<EOJ>
+Definition of keywords:
+{
+“aao_id”: “Unique ID”,
+“Nth”: “The concept hierarchy from 1st to 10th level”,
+“task_name”: “The most basic task name”,
+“reading”: “Pronunciation of the task name”,
+“notation”: “Possible variations in notation”,
+“concept”: “The column listing the various objectives associated with a task”,
+“combined_task”: “Combined tasks”,
+“purpose”: “Purpose of the task”,
+“action”: “Specific actions of the task”,
+“target”: “Target of the task”,
+“sub_target”: “Sub-target of the task”,
+“location”: “Location”,
+“method”: “Method”,
+“material”: “Materials used”,
+“crop_example”: “Example of crops”,
+“season”: “Season”,
+“condition”: “Conditions”,
+“agrovoc”: “Link to AGROVOC”,
+“naropedia”: “Link to Neropedia”,
+“wikipedia”: “Link to Wikipedia”
+}
 
-Output Example 1:
-To protect rice seeds from diseases and pests, a method called "iron coating" is effective. This method involves coating the seeds with iron, which stabilizes germination in the rice field and helps protect them from diseases and pests. Seeds coated with iron are also more resistant to environmental stress, promoting healthy germination and growth.
+Example keywords:
+{“ID”: “A47”,“first”: “Agricultural Work”,“second”: “Basic Agricultural Work”,“third”: “Crop Production Work”,“fourth”: “Crop Growth Control Work”,“fifth”: “Reproduction Control Work”,“sixth”: “Germination Stabilization Work”,“seventh”: “Seed Sprouting”,“eighth”: “Light Exposure Sprouting”,“ninth”: “”,“tenth”: “”,“task_name”: “Light Exposure Sprouting”,“reading”: “Yokuko-saiga”,“notation”: “Yokuko-ikuga;Yokuko-sprouting”,“english”: “Green-sprouting”,“concept”: “”,“purpose”: “Promote germination”,“action”: “Expose”,“target”: “Seed tubers”,“sub_target”: “”,“location”: “Light”,“method”: “”,“material”: “”,“crop_example”: “Potato”,“condition”: “”,“agrovoc”: “”,“naropedia”: “”,“wikipedia”: “”}
+{“ID”: “A44”,“first”: “Agricultural Work”,“second”: “Basic Agricultural Work”,“third”: “Crop Production Work”,“fourth”: “Crop Growth Control Work”,“fifth”: “Reproduction Control Work”,“sixth”: “Germination Stabilization Work”,“seventh”: “Seed Sprouting”,“eighth”: “”,“ninth”: “”,“tenth”: “”,“task_name”: “Seed Sprouting”,“reading”: “Saiga”,“notation”: “Sprouting”,“english”: “Forcing germination”,“concept”: “”,“purpose”: “Promote germination”,“action”: “Expose”,“target”: “”,“sub_target”: “”,“location”: “”,“method”: “”,“material”: “”,“crop_example”: “”,“condition”: “”,“agrovoc”: “”,“naropedia”: “”,“wikipedia”: “http://lib.ruralnet.or.jp/nrpd/#box_search=Seed_Sprouting&kensuu=10&sort=0&logic=1&page=0&bunya=&koumoku=11909&db=&uid=0”}
+{“ID”: “A4”,“first”: “Agricultural Work”,“second”: “Basic Agricultural Work”,“third”: “Crop Production Work”,“fourth”: “Crop Growth Control Work”,“fifth”: “”,“sixth”: “”,“seventh”: “”,“eighth”: “”,“ninth”: “”,“tenth”: “”,“task_name”: “Crop Growth Control Work”,“reading”: “Crop Growth Control Work”,“notation”: “Growth Control”,“english”: “Practice for crop growth control”,“concept”: “”,“purpose”: “Control crop growth”,“action”: “”,“target”: “”,“sub_target”: “”,“location”: “”,“method”: “”,“material”: “”,“crop_example”: “”,“condition”: “”,“agrovoc”: “”,“naropedia”: “”,“wikipedia”: “”}
+…
+{“ID”: “A105”,“first”: “Agricultural Work”,“second”: “Basic Agricultural Work”,“third”: “Crop Production Work”,“fourth”: “Crop Growth Control Work”,“fifth”: “Reproductive Growth Control Work”,“sixth”: “Quality Control Work”,“seventh”: “Fruit Hanging”,“eighth”: “”,“ninth”: “”,“tenth”: “”,“task_name”: “Fruit Hanging”,“reading”: “Tamatsuri”,“notation”: “”,“english”: “Fruit hanging”,“concept”: “”,“purpose”: “Quality control”,“action”: “Hang”,“target”: “Fruit”,“sub_target”: “”,“location”: “”,“method”: “”,“material”: “”,“crop_example”: “Melon”,“condition”: “”,“agrovoc”: “”,“naropedia”: “”,“wikipedia”: “”}
 
-Related URI: http://cavoc.org/aao/ns/4/A51
+Example output:
+To make potato seed tubers sprout more easily, use the technique called “Seed Sprouting” (Saiga). This is a method of promoting sprouting by exposing the seed tubers to the appropriate environment. A more specific and effective method within this is “Light Exposure Sprouting” (Yokuko-saiga).
+
+Light Exposure Sprouting involves exposing seed tubers to light to promote sprouting. By applying light correctly, the seed tubers sprout faster and more uniformly, leading to more stable germination. This method is particularly helpful in supporting the early growth stage of potatoes, improving the speed and uniformity of sprouting.
+
+The specific steps involve placing the seed tubers in a bright, non-direct sunlight location for several days to weeks. During this process, the seed tubers will green and develop strong sprouts, resulting in healthier seedlings when planted in the field.
+
+AGROVOC URI: {appropriate link}
+Naropedia URL: {appropriate link}
+Wikipedia URL: {appropriate link}

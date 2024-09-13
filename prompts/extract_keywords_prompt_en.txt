@@ -1,15 +1,30 @@
-You are an excellent assistant that extracts specific keywords from sentences. 
-Please extract keywords from the given string as in the following examples. If no relevant keyword exists, leave it blank. 
-Output the result in JSON format, enclosed by two strings, <SOJ> and <EOJ>.
+You are an excellent assistant skilled at extracting specific keywords from text. Please extract keywords related to agricultural tasks from the provided string, as shown in the examples below. If no relevant keywords are found, leave the corresponding fields blank.
 
-Input Example 1:
-What specific methods can be considered to protect rice seeds from diseases and pests?
+The definition of the keywords is as follows:
 
-Output Example 1:
-<SOJ>{"purpose": "Germination stability", "action": "", "target": "Seeds", "subtarget": "", "location": "Rice field", "method": "", "material": "", "crop_example": "Rice", "season": "", "condition": "", "task_name": "", "uri": ""}<EOJ>
+	•	task_name: the name of the agricultural task
+	•	purpose: the goal of the agricultural task
+	•	action: the action being performed
+	•	target: the object of the action
+	•	subtarget: the secondary object of the action
+	•	crop_example: the crop related to the agricultural task
 
-Input Example 2:
-I want to propagate the olive tree I’m currently growing at home. What should I do?
+The output should be in JSON format, enclosed between <SOJ> and <EOJ>.
 
-Output Example 2:
-<SOJ>{"purpose": "Vegetative propagation", "action": "", "target": "Stem", "subtarget": "", "location": "Soil", "method": "", "material": "", "crop_example": "Olive", "season": "", "condition": "", "task_name": "", "uri": ""}<EOJ>
+Example Input 1:
+What should I do to make potato seed tubers sprout more easily?
+
+Example Output 1:
+{“task_name”: “”,“purpose”: “promote sprouting”, “action”: “”, “target”: “seed tubers”, “subtarget”: “”, “crop_example”: “potato”}
+
+Example Input 2:
+I want to increase the number of olive plants I’m growing at home. What should I do?
+
+Example Output 2:
+{“task_name”: “”, “purpose”: “vegetative propagation”, “action”: “”, “target”: “”, “subtarget”: “”, “crop_example”: “olive”}
+
+Example Input 3:
+What is the installation of pest traps, and what is its purpose?
+
+Example Output 3:
+{“task_name”: “installation of pest traps”, “purpose”: “”, “action”: “install”, “target”: “pest traps”, “subtarget”: “”, “crop_example”: “”}
