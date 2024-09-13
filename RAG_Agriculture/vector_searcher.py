@@ -3,7 +3,6 @@
 JSONでキーワードを受け取り、検索結果をJSONもしくはJSONのリストで返す
 """
 from transformers import AutoTokenizer, AutoModel
-import polars as pl
 import json
 import os
 import sys
@@ -83,7 +82,8 @@ class VectorSearcher:
                 embed_vector = text_embedding([me5_input], model, tokenizer).detach().numpy()[0]
                 
                 response = agris.query.near_vector(
-                    near_vector=embed_vector, limit=n
+                    near_vector=embed_vector, 
+                    limit=n,
                 )
 
             finally:

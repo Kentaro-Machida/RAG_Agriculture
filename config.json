@@ -4,7 +4,7 @@
     "generate_llm":"gpt-3.5-turbo",
     "generate_answer_prompt_path":"./prompts/generate_answer_prompt.txt",
     "embedding_model":"intfloat/multilingual-e5-large",
-    "search_num":5,
+    "search_num":30,
     "from_ja_translator_url":"http://localhost:5001/translate/from_ja",
     "to_ja_translator_url":"http://localhost:5001/translate/to_ja",
 

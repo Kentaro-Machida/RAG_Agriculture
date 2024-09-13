@@ -5,6 +5,7 @@
 import requests
 from RAG_Agriculture import answer_generator as ag, keywords_extractor as ke, vector_searcher as vs
 from RAG_Agriculture.utils.data_load import load_json, add_lang_to_promptpath
+from RAG_Agriculture.utils.text_preprocess import count_layers
 from langdetect import detect
 
 
@@ -113,7 +114,9 @@ def test():
     print("Embedding model:", embedding_model)
     print("Connection name:", config['weaviate']['schema']['class'])
     keywords_list = vector_searcher.search(keywords, n=search_num)
-    print("Vector search results:", keywords_list)
+    for i, keywords in enumerate(keywords_list):
+        print(f"Search result {i+1}: {keywords['task_name']}")
+        print(f"Number of layers: {count_layers(keywords)}")
 
     # Translate keywords back to the original language
     if lang != 'ja':
@@ -129,7 +132,8 @@ def test():
             else:
                 print(f"Error: {response.status_code}")
         
-        print("Translated keywords:", keywords_list)
+        for i, keywords in enumerate(keywords_list):
+            print(f"Translated search result {i+1}: {keywords['task_name']}")
 
 
     # Generate answer

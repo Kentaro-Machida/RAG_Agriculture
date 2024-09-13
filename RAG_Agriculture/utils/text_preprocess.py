@@ -11,6 +11,19 @@ def keywords2text(keywords: dict) -> str:
     
     return text
 
+
+def count_layers(keywords: dict) -> int:
+    '''
+    Count the number of layers in the keywords dict.
+    '''
+    target_list = ['first','second','third','fourth','fifth','sixth','seventh','eighth','ninth','tenth']
+    count = 0
+    for target in target_list:
+        if keywords[target] != '':
+            count += 1
+    return count
+
+
 def mE5_preprocess(text:str, target:str)->str:
     '''
     Preprocess text for mE5 embedding model.
@@ -61,10 +74,23 @@ def test():
         "REGION": "",
         "CONDITION": "",
         "TASK_NAME": "",
-        "URI": ""
+        "URI": "",
+        "first": "hello",
+        "second": "",
+        "third": "こんにちは",
+        "fourth": "",
+        "fifth": "",
+        "sixth": "",
+        "seventh": "",
+        "eighth": "",
+        "ninth": "",
+        "tenth": ""
     }
     print('------keywords2text------')
     print(keywords2text(keywords))
+
+    print('------count_layers------')
+    print(count_layers(keywords))
 
     query = '鉄コーディングとはなんですか？'
     print('------mE5_preprocess------')
