@@ -8,66 +8,105 @@ Retrieval augmented generation using LLM for Agriculture knowledge graph for Jap
 
 ```json
 {
-    "index_strategy":"all",  # 全てのカラムをindexとして埋め込む"all"もしくは、一部のカラムを埋め込む"sep"
-    "retrieve_llm":"gpt-3.5-turbo",  # 質問文からキーワードを抜き出すLLM
-    "extract_keywords_prompt_path":"./prompts/extract_keywords_prompt.txt",  # キーワードを抜き出すLLMの初期プロンプトへのパス
-    "generate_llm":"gpt-3.5-turbo",  # 検索結果キーワードと質問文から解答を生成するLLM
-    "generate_answer_prompt_path":"./prompts/generate_answer_prompt.txt",  # generate_llmの初期プロンプトへのパス
-    "embedding_model":"openai",  # ベクトル検索に使用する埋め込みモデル
-    "search_num":5,  # ベクトル検索でとってくるオブジェクト数
-    # weaviate の設定
+    "retrieve_llm":"gpt-3.5-turbo",
+    "extract_keywords_prompt_path":"./prompts/extract_keywords_prompt.txt",
+    "generate_llm":"gpt-3.5-turbo",
+    "generate_answer_prompt_path":"./prompts/generate_answer_prompt.txt",
+    "embedding_model":"intfloat/multilingual-e5-large",
+    "search_num":30,
+    "from_ja_translator_url":"http://localhost:5001/translate/from_ja",
+    "to_ja_translator_url":"http://localhost:5001/translate/to_ja",
+
     "weaviate":{
-        # keyはwaviate collectionのプロパティ名、valueはデータセットにおける対応するカラム名
-        "target_columns":{
+        "vector_columns":{
             "task_name": "作業名",
             "purpose": "目的(ja)",
             "action": "行為(ja)",
             "target": "対象(ja)",
             "sub_target": "副対象(ja)",
-            "location": "場所(ja)",
-            "method": "手段(ja)",
-            "material": "機資材(ja)",
-            "crop_example": "生産対象(ja)",
-            "season": "時期(ja)",
-            "condition": "作業条件(ja)"
+            "crop_example": "生産対象(ja)"
         },
-        # ベクトルDBとして使用する農作業オントロジーデータへのパス
-        "data_path": "./datasets/aao_mini_sample.csv",
-        # weaviate で collection を作成する際の設定
+        "rule_based_columns":{
+            "first": "第1階層",
+            "second": "第2階層",
+            "third": "第3階層",
+            ...
+        },
+        "prompt_only_columns":{
+            "aao_id": "ID",
+            "reading": "よみ",
+            "notation": "|表記|",
+            ...
+        },
+        "data_path": "./datasets/aao_ver_4_05.csv",
         "schema":{
-            "class": "Agriculuture",
+            "class": "Agriculture",
             "description": "農作業基本オントロジーに関するデータ。URL:https://cavoc.org/aao/ns/4/A1.html",
-            "vectorizer": "text2vec-openai",
+            "vectorizer": "none",
             "moduleConfig": {
                 "text2vec-contextionary": {
-                    "vectorizeClassName": true   
+                    "vectorizeClassName": true
                 }
             },
             "properties":[
                 {
                     "name": "task_name",
                     "dataType": ["text"],
-                    "moduleConfig": {
+                    "moduleConfig": {           
                         "text2vec-contextionary": {
-                            # プロパティ名をベクトルの埋め込みに使用する場合true
                             "vectorizePropertyName": true
                         }
                     }
                 },
                 {
                     "name": "purpose",
-                    "dataType": ["text"]
+                    "dataType": ["text"],
+                    "moduleConfig": {           
+                        "text2vec-contextionary": {
+                            "vectorizePropertyName": true
+                        }
+                    }
                 },
-                ......
-            ]
-        }
-    }
-}
+                {
+                    "name": "action",
+                    "dataType": ["text"],
+                    "moduleConfig": {           
+                        "text2vec-contextionary": {
+                            "vectorizePropertyName": true
+                        }
+                    }
+                },
+
+
 ```
 それぞれのモデルの選択肢は以下の通り。
 * retrieve_llm: gpt-3.5-turbo, gpt-4o
-* embedding_model: openai, intfloat/multilingual-e5-large
+* embedding_model: openai（行が多すぎるとリクエスト制限に引っかかる）, intfloat/multilingual-e5-large
 * generate_llm: gpt-3.5-turbo, gpt-4o
+### 使用するLLMやシステム全体の設定
+* retrieve_llm:質問からキーワードを抽出するためのLLM（例: "gpt-3.5-turbo", "gpt-4o"）。
+* extract_keywords_prompt_path:キーワード抽出用LLMのプロンプトファイルのパス。
+* generate_llm:解答生成に使用するLLM（例: "gpt-3.5-turbo", "gpt-4o"）。
+* generate_answer_prompt_path:解答生成用プロンプトファイルのパス。
+* embedding_model:埋め込みモデル（例: "openai"）。
+* search_num:ベクトル検索で取得するオブジェクト数（例: 5）。
+
+### Weaviate設定
+* target_columns:Weaviateのプロパティ名とデータセットのカラム名の対応。
+* vector_columns: Weaviate でのベクトル検索に使用するカラム
+* rule_based_columns: ベクトル検索には使用しないが、検索語のRerankで使用する（予定）のカラム
+* prompt_only_columns: 回答生成時にのみ使用する予定のカラム
+* "task_name": 作業名
+* "purpose": 目的（日本語）
+* "action": 行為（日本語）
+他同様の項目...
+* data_path:農作業オントロジーデータのCSVファイルのパス。prepare_vector_db.pyによりデータベースを構築するときに使用。
+
+### Weaviateスキーマ設定
+* class:コレクションのクラス名（例: "Agriculture"）。
+* description:クラスの説明文。
+* vectorizer:使用するベクトル化モジュール（例: "text2vec-openai"）。
+* properties:コレクションのプロパティ設定（例: "task_name", "purpose"）。
 
 ## 使い方
 全てベースディレクトリ（このREADME.md と同じディレクトリ）からの実行を前提とする。
