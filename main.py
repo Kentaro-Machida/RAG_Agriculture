@@ -9,10 +9,9 @@ from RAG_Agriculture.utils.text_preprocess import count_layers
 from langdetect import detect
 
 
-def main():
+def main(question: str, config: dict):
 
-    # load config.json
-    config = load_json('./config.json')
+    
     retrieve_llm = config['retrieve_llm']
     extract_keywords_prompt_path = config['extract_keywords_prompt_path']
     generate_llm = config['generate_llm']
@@ -20,8 +19,6 @@ def main():
     embedding_model = config['embedding_model']
     search_num = config['search_num']
 
-    # Input text by conversation system
-    question = input("Please input your question: ")
     lang = detect(question)
     if lang != 'ja':
         extract_keywords_prompt_path = add_lang_to_promptpath(extract_keywords_prompt_path, lang)
@@ -68,9 +65,11 @@ def main():
     return answer
 
 
-def test():
-    # load config.json
-    config = load_json('./config.json')
+def test(question:str, config:dict)->dict:
+    
+    process_log_dict = {}
+    process_log_dict['question'] = question
+
     retrieve_llm = config['retrieve_llm']
     extract_keywords_prompt_path = config['extract_keywords_prompt_path']
     generate_llm = config['generate_llm']
@@ -78,12 +77,11 @@ def test():
     embedding_model = config['embedding_model']
     search_num = config['search_num']
 
-    # Input text by conversation system
-    question = input("Please input your question: ")
     lang = detect(question)
     if lang != 'ja':
         extract_keywords_prompt_path = add_lang_to_promptpath(extract_keywords_prompt_path, lang)
         generate_answer_prompt_path = add_lang_to_promptpath(generate_answer_prompt_path, lang)
+    process_log_dict['language'] = lang
 
     print("-------------------")
     print("Question:", question)
@@ -92,6 +90,7 @@ def test():
     # Extract keywords from the question
     keyword_extractor = ke.KeywordExtractor(extract_keywords_prompt_path, retrieve_llm)
     keywords = keyword_extractor.extract_keywords(question)
+    process_log_dict['keywords'] = keywords
     print("-------------------")
     print("Key words extraction model: ",retrieve_llm)
     print("Extracted keywords:", keywords)
@@ -104,19 +103,27 @@ def test():
         response = requests.post(url, headers=headers, json={"keywords": keywords, "lang": lang})
         if response.status_code == 200:
             keywords = response.json()  # JSONレスポンスを辞書型として取得
+            process_log_dict['translated_keywords'] = keywords
             print(keywords)
         else:
             print(f"Error: {response.status_code}")
 
     # Search the knowledge graph
+    task_name_list = []
+    layer_list = []
     vector_searcher = vs.VectorSearcher(embedding_model, connection_name=config['weaviate']['schema']['class'])
     print("-------------------")
     print("Embedding model:", embedding_model)
     print("Connection name:", config['weaviate']['schema']['class'])
     keywords_list = vector_searcher.search(keywords, n=search_num)
     for i, keywords in enumerate(keywords_list):
+        task_name_list.append(keywords['task_name'])
+        layer_list.append(count_layers(keywords))
         print(f"Search result {i+1}: {keywords['task_name']}")
         print(f"Number of layers: {count_layers(keywords)}")
+
+    process_log_dict['Search result: task_name_list'] = task_name_list
+    process_log_dict['Search result: layer_list'] = layer_list
 
     # Translate keywords back to the original language
     if lang != 'ja':
@@ -131,19 +138,35 @@ def test():
                 keywords_list[i] = trans_keywords
             else:
                 print(f"Error: {response.status_code}")
-        
+        task_name_list = []
+        layer_list = []
         for i, keywords in enumerate(keywords_list):
+            task_name_list.append(keywords['task_name'])
+            layer_list.append(count_layers(keywords))
             print(f"Translated search result {i+1}: {keywords['task_name']}")
+            print(f"Number of layers: {count_layers(keywords)}")
+        
+        process_log_dict['Translated search result: task_name_list'] = task_name_list
+        process_log_dict['Translated search result: layer_list'] = layer_list
 
 
     # Generate answer
     answer_generator = ag.AnswerGenerator(generate_answer_prompt_path, generate_llm)
     answer = answer_generator.generate_answer(keywords_list, question)
 
+    process_log_dict['Answer'] = answer
     print("-------------------")
     print("Answer generation model:", generate_llm)
     print("Answer:", answer)
     
+    return process_log_dict
+    
 
 if __name__ == '__main__':
-    test()
+    # load config.json
+    config = load_json('./config.json')
+    # Input text by conversation system
+    question = input("Please input your question: ")
+    
+    test(question, config)
+    # main(question, config)
