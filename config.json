@@ -2,11 +2,14 @@
     "retrieve_llm":"gpt-3.5-turbo",
     "extract_keywords_prompt_path":"./prompts/extract_keywords_prompt.txt",
     "generate_llm":"gpt-3.5-turbo",
-    "generate_answer_prompt_path":"./prompts/generate_answer_prompt.txt",
+    "generate_answer_prompt_path":"./prompts/generate_answer_without_rag.txt",
     "embedding_model":"intfloat/multilingual-e5-large",
-    "search_num":30,
+    "rerank_model":"Alibaba-NLP/gte-multilingual-reranker-base",
+    "search_num":50,
+    "rerank_num":10,
     "from_ja_translator_url":"http://localhost:5001/translate/from_ja",
     "to_ja_translator_url":"http://localhost:5001/translate/to_ja",
+    "without_rag": false,
 
     "weaviate":{
         "vector_columns":{

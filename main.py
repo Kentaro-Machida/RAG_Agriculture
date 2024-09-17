@@ -4,7 +4,8 @@
 """
 import requests
 from RAG_Agriculture import answer_generator as ag, keywords_extractor as ke, vector_searcher as vs
-from RAG_Agriculture.utils.data_load import load_json, add_lang_to_promptpath
+from RAG_Agriculture import reranker as rr
+from RAG_Agriculture.utils.data_load import load_json, add_lang_to_promptpath, json2str, str2json
 from RAG_Agriculture.utils.text_preprocess import count_layers
 from langdetect import detect
 
@@ -76,6 +77,7 @@ def test(question:str, config:dict)->dict:
     generate_answer_prompt_path = config['generate_answer_prompt_path']
     embedding_model = config['embedding_model']
     search_num = config['search_num']
+    rerank_num = config['rerank_num']
 
     lang = detect(question)
     if lang != 'ja':
@@ -162,6 +164,32 @@ def test(question:str, config:dict)->dict:
         
         process_log_dict['Translated search result: task_name_list'] = task_name_list
         process_log_dict['Translated search result: layer_list'] = layer_list
+
+    # Rerank
+    if config['rerank_model']:
+        reranked_task_name_list = []
+        reranked_layer_list = []
+        reranked_scores = []
+
+        print("--- Rerank test ---")
+        reranker = rr.Reranker(config['rerank_model'])
+        keywords_list, scores = reranker.rerank(question, keywords_list)
+
+        print("Reranked search results:")
+        for i, result in enumerate(keywords_list):
+            reranked_task_name_list.append(result['task_name'])
+            reranked_layer_list.append(count_layers(result))
+            reranked_scores.append(scores[i])
+
+            print(f"{i+1}: {result["task_name"]}")
+            print(f"Score: {scores[i]}")
+            print(f"Number of layers: {count_layers(result)}")
+        
+        process_log_dict['Reranked search result: task_name_list'] = reranked_task_name_list
+        process_log_dict['Reranked search result: layer_list'] = reranked_layer_list
+        process_log_dict['Reranked search result: scores'] = reranked_scores
+
+        keywords_list = keywords_list[:rerank_num]
 
 
     # Generate answer
