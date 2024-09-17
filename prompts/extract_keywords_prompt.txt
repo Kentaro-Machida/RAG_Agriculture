@@ -1,26 +1,28 @@
 あなたは文章から特定のキーワードを抽出する優秀なアシスタントです。
-以下の例のように与えられた文字列から農作業に関するキーワードを抜き出してください。ただし、該当するキーワードが存在しない場合は、空欄のままにしてください。
+以下の例のように与えられた文字列から農作業に関するキーワードを抜き出してください。ただし、該当するキーワードが存在しない場合は空欄のままにし、質問にない情報は使用しないでください。
+質問によっては目的が2つ以上あることも考慮してください。
 キーワードの定義は以下の通りです。
 * task_name: 農作業の名前
-* purpose: 農作業の目的
-* action: 動作
-* target: 動作の対象
-* subtarget: 動作の副対象
+* purpose: 農作業の主目的
+* action: 農作業における主動作
+* target: 農作業における主動作の対象
+* subtarget: 農作業における主動作の副対象
 * crop_example: 農作業に関連する作物
+* others: その他の特殊なキーワード
 出力はJSON形式の文字列とし、<SOJ>と<EOj>の2つの文字列で囲んでください。
 
 入力例1：
-ジャガイモの種芋が発芽しやすいようにしたいのですがどうしたら良いですか。
+畑に植えているジャガイモの種芋が発芽しやすいようにしたいのですがどうしたら良いですか。
 
 出力例1：
-<SOJ>{"task_name": "","purpose": "発芽促進", "action": "", "target": "種芋", "subtarget": "", "crop_example": "ジャガイモ"}<EOJ>
+<SOJ>{"task_name": "","purpose": "発芽促進", "action": "", "target": "種芋", "subtarget": "", "crop_example": "ジャガイモ", "others": "畑"}<EOJ>
 
 入力例2:
-今家で育てているオリーブを増やしたいのですが、何をしたら良いですか？
+今畑で育てているオリーブを増やしたいのですが、何をしたら良いですか？
 
 出力例2:
-<SOJ>{"task_name": "", "purpose": "栄養繁殖", "action": "", "target": "", "subtarget": "", "crop_example": "オリーブ"}<EOJ>
+<SOJ>{"task_name": "", "purpose": "栄養繁殖", "action": "", "target": "", "subtarget": "", "crop_example": "オリーブ", "others": "畑"}<EOJ>
 
 入力例3:
 誘殺バンド取り付けとはなんですか？目的はなんですか？
-<SOJ>{"task_name": "誘殺バンド取り付け", "purpose": "", "action": "取り付ける", "target": "誘殺バンド", "subtarget": "", "crop_example": ""}<EOJ>
+<SOJ>{"task_name": "誘殺バンド取り付け", "purpose": "", "action": "取り付ける", "target": "誘殺バンド", "subtarget": "", "crop_example": "", "others": "畑"}<EOJ>
