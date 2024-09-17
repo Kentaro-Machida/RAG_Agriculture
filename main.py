@@ -87,6 +87,20 @@ def test(question:str, config:dict)->dict:
     print("Question:", question)
     print("Language:", lang)
 
+    # Without RAG
+    if config['without_rag']:
+        print("--- Without RAG test ---")
+        # Generate answer
+        answer_generator = ag.AnswerGenerator(generate_answer_prompt_path, generate_llm)
+        answer = answer_generator.generate_answer_without_rag(question)
+
+        process_log_dict['Answer'] = answer
+        print("-------------------")
+        print("Answer generation model:", generate_llm)
+        print("Answer:", answer)
+
+        return process_log_dict
+
     # Extract keywords from the question
     keyword_extractor = ke.KeywordExtractor(extract_keywords_prompt_path, retrieve_llm)
     keywords = keyword_extractor.extract_keywords(question)

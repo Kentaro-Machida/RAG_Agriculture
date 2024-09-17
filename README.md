@@ -90,6 +90,7 @@ Retrieval augmented generation using LLM for Agriculture knowledge graph for Jap
 * generate_answer_prompt_path:解答生成用プロンプトファイルのパス。
 * embedding_model:埋め込みモデル（例: "openai"）。
 * search_num:ベクトル検索で取得するオブジェクト数（例: 5）。
+* without_rag: RAGを使用しないテストを行うかどうか（true or false）
 
 ### Weaviate設定
 * target_columns:Weaviateのプロパティ名とデータセットのカラム名の対応。

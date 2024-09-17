@@ -45,6 +45,26 @@ class AnswerGenerator:
         
         return answer
 
+    def generate_answer_without_rag(self, question:str) -> str:
+        
+        if self.generate_llm == 'gpt-3.5-turbo' or 'gpt-4o':
+            client = OpenAI()
+
+            completion = client.chat.completions.create(
+            model=self.generate_llm,
+            messages=[
+                {"role": "system", "content": self.generate_answer_prompt},
+                {"role": "user", "content": question}
+            ]
+            )
+
+            answer = completion.choices[0].message.content
+        else:
+            print('Please set the correct LLM model to generate_llm in config file for answer generation.')
+            sys.exit()
+        
+        return answer
+
 
 def test():
     # キーワード辞書の読み込み
