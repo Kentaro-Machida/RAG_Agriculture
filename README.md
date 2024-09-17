@@ -11,11 +11,14 @@ Retrieval augmented generation using LLM for Agriculture knowledge graph for Jap
     "retrieve_llm":"gpt-3.5-turbo",
     "extract_keywords_prompt_path":"./prompts/extract_keywords_prompt.txt",
     "generate_llm":"gpt-3.5-turbo",
-    "generate_answer_prompt_path":"./prompts/generate_answer_prompt.txt",
+    "generate_answer_prompt_path":"./prompts/generate_answer_without_rag.txt",
     "embedding_model":"intfloat/multilingual-e5-large",
-    "search_num":30,
+    "rerank_model":"Alibaba-NLP/gte-multilingual-reranker-base",
+    "search_num":50,
+    "rerank_num":10,
     "from_ja_translator_url":"http://localhost:5001/translate/from_ja",
     "to_ja_translator_url":"http://localhost:5001/translate/to_ja",
+    "without_rag": false,
 
     "weaviate":{
         "vector_columns":{
@@ -83,13 +86,16 @@ Retrieval augmented generation using LLM for Agriculture knowledge graph for Jap
 * retrieve_llm: gpt-3.5-turbo, gpt-4o
 * embedding_model: openai（行が多すぎるとリクエスト制限に引っかかる）, intfloat/multilingual-e5-large
 * generate_llm: gpt-3.5-turbo, gpt-4o
+
 ### 使用するLLMやシステム全体の設定
 * retrieve_llm:質問からキーワードを抽出するためのLLM（例: "gpt-3.5-turbo", "gpt-4o"）。
 * extract_keywords_prompt_path:キーワード抽出用LLMのプロンプトファイルのパス。
 * generate_llm:解答生成に使用するLLM（例: "gpt-3.5-turbo", "gpt-4o"）。
 * generate_answer_prompt_path:解答生成用プロンプトファイルのパス。
 * embedding_model:埋め込みモデル（例: "openai"）。
-* search_num:ベクトル検索で取得するオブジェクト数（例: 5）。
+* rerank_model:リランクに使用するモデル
+* search_num:ベクトル検索で取得するオブジェクト数（例: 30）。
+* rerank_num: リランクした後Generatorに渡すキーワードの数。search_numより少ない必要がある(例: 10)。
 * without_rag: RAGを使用しないテストを行うかどうか（true or false）
 
 ### Weaviate設定
@@ -175,9 +181,14 @@ RAG_Agriculuture ディレクトリの中にモジュールが格納されてい
 * 入力：キーワード辞書（dict）
 * 出力：ヒットしたオブジェクトのリスト（list）
 
+### reranker
+ベクトル検索の結果得られた辞書型キーワードのリストと入力された質問から、質問に対する回答がどのくらい適切かをスコアかし、再度ランキングを変更するモジュール
+* 入力：質問文(str)、ヒットしたオブジェクトのリスト(list[dict])
+* 出力：再度並べ替えられたキーワードのリスト(list[dict])
+
 ### answer_generator
 検索システムにより抜き出してきた情報と質問文を組み合わせて解答を生成するモジュール
-* 入力：質問文（str）、ヒットしたオブジェクトのリスト（list）
+* 入力：質問文（str）、ヒットしたオブジェクトのリスト（list[dict]）
 * 出力：生成データ
 
 ### utils
