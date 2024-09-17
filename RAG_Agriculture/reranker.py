@@ -10,14 +10,22 @@ import copy
 class Reranker:
 
     def __init__(self, model_name:str):
+        # MPSまたはCUDAが利用可能か確認
+        if torch.cuda.is_available():
+            self.device = torch.device("cuda")
+        elif torch.backends.mps.is_built():
+            self.device = torch.device("mps")
+        else:
+            self.device = torch.device("cpu")
         self.model = AutoModelForSequenceClassification.from_pretrained(
             model_name, 
             trust_remote_code=True,
             torch_dtype=torch.float16
             )
+        self.model = self.model.to(self.device)
         self.tokenizer = AutoTokenizer.from_pretrained(model_name)
         self.model.eval()
-
+        
 
     def _text_preprocess(self, keywords_list:list) -> list[str]:
         """
@@ -75,7 +83,8 @@ class Reranker:
         pairs = [(question, result) for result in processed_keywords_list]
         with torch.no_grad():
             inputs = self.tokenizer(pairs, padding=True, truncation=True, return_tensors='pt', max_length=512)
-            scores = self.model(**inputs, return_dict=True).logits.view(-1, ).float()
+            inputs = {key: value.to(self.device) for key, value in inputs.items()}
+            scores = self.model(**inputs, return_dict=True).logits.view(-1, ).float().to('cpu')
 
         sorted_results = [result for _, result in sorted(zip(scores, tmp_search_results), key=lambda x: x[0], reverse=True)]
         scores = [score.item() for score in sorted(scores, reverse=True)]

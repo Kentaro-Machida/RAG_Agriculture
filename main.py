@@ -11,7 +11,6 @@ from langdetect import detect
 
 
 def main(question: str, config: dict):
-
     
     retrieve_llm = config['retrieve_llm']
     extract_keywords_prompt_path = config['extract_keywords_prompt_path']
@@ -19,6 +18,7 @@ def main(question: str, config: dict):
     generate_answer_prompt_path = config['generate_answer_prompt_path']
     embedding_model = config['embedding_model']
     search_num = config['search_num']
+    rerank_num = config['rerank_num']
 
     lang = detect(question)
     if lang != 'ja':
@@ -58,6 +58,12 @@ def main(question: str, config: dict):
                 keywords_list[i] = trans_keywords
             else:
                 print(f"Error: {response.status_code}")    
+
+    # Rerank
+    if config['rerank_model']:
+        reranker = rr.Reranker(config['rerank_model'])
+        keywords_list, scores = reranker.rerank(question, keywords_list)
+        keywords_list = keywords_list[:rerank_num]
 
     # Generate answer
     answer_generator = ag.AnswerGenerator(generate_answer_prompt_path, generate_llm)
@@ -210,5 +216,5 @@ if __name__ == '__main__':
     # Input text by conversation system
     question = input("Please input your question: ")
     
-    test(question, config)
-    # main(question, config)
+    # test(question, config)
+    print(main(question, config))
