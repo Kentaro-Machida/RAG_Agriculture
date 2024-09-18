@@ -6,6 +6,7 @@ Output: 回答ディレクトリを作成し、回答データおよび設定を
 """
 
 import os
+import pandas as pd
 import sys
 import json
 import argparse
@@ -16,6 +17,7 @@ import requests
 from RAG_Agriculture import answer_generator as ag, keywords_extractor as ke, vector_searcher as vs
 from RAG_Agriculture.utils.data_load import load_json, add_lang_to_promptpath
 from RAG_Agriculture.utils.text_preprocess import count_layers
+from RAG_Agriculture.utils.metrics import mean_ndpc_from_taskname, recall_k_from_taskname, mrr
 from langdetect import detect
 
 
@@ -72,6 +74,48 @@ def save_processed_files(output_dir, processed_data):
         print(f"ファイル {file_path} を保存しました。")
 
 
+def add_evaluation(gt_dir_path:str, processed_data:dict, k=20) -> dict:
+    # 評価指標を計算し、データに追加
+    for file_name, data in processed_data.items():
+        try:
+            task_name_list = data['Search result: task_name_list']
+            gt_path = os.path.join(gt_dir_path, file_name.replace('.txt', '.csv'))
+            gt_task = pd.read_csv(gt_path)['task_name'].tolist()
+            processed_data[file_name]['GT'] = gt_task
+
+            # 評価指標を計算
+            ndcp = mean_ndpc_from_taskname(task_name_list, gt_task, k=k)
+            recall = recall_k_from_taskname(task_name_list, gt_task, k=k)
+            mrr_score = mrr(task_name_list, gt_task)
+
+            # データに追加
+            processed_data[file_name]['Evaluation'] = {
+                f'ndcp@{k}': ndcp,
+                f'recall@{k}': recall,
+                'mrr': mrr_score
+            }
+            print(processed_data[file_name]['Evaluation'])
+        
+            # "Reranked search result: task_name_list"がdataにkeyとして含まれている場合のみの処理
+            if 'Reranked search result: task_name_list' in data:
+                reranked_task_name_list = data['Reranked search result: task_name_list']
+                ndcp = mean_ndpc_from_taskname(reranked_task_name_list, gt_task)
+                recall = recall_k_from_taskname(reranked_task_name_list, gt_task)
+                mrr_score = mrr(reranked_task_name_list, gt_task)
+                processed_data[file_name]['Reranked_Evaluation'] = {
+                    f'reranked_ndcp@{k}': ndcp,
+                    f'reranked_recall@{k}': recall,
+                    'reranked_mrr': mrr_score
+                }
+                print(processed_data[file_name]['Reranked_Evaluation'])
+        except Exception as e:
+            print(f"Error: {e}")
+            print(f"ファイル {file_name} に対する評価指標の計算に失敗しました。")
+            continue
+    
+    return processed_data
+
+
 if __name__ == '__main__':
     # コマンドライン引数の解析
     args = parse_arguments()
@@ -94,6 +138,11 @@ if __name__ == '__main__':
 
     # 各ファイルの内容を test() に通して処理
     processed_data = {file_name: test(data, config) for file_name, data in file_contents.items()}
+
+    # 得られた結果を評価し新たに追加
+    gt_dir = output_dir.replace('output', 'GT')
+    print('------ Evaluation ------')
+    processed_data = add_evaluation(gt_dir, processed_data)
 
     # 処理されたデータを output ディレクトリに保存する
     save_processed_files(output_dir, processed_data)
