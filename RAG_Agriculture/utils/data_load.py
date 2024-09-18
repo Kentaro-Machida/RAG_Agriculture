@@ -31,8 +31,9 @@ def str2json(json_str:str)->dict:
     try:
         json_str = json_str.split('<SOJ>')[-1].split('<EOJ>')[0]
         json_data = json.loads(json_str)
-    except:
+    except Exception as e:
         print('Error: Failed to convert string to json in str2json function in data_load.py')
+        print(f'Error: {e}')
         print(f'json_str: {json_str}')
         sys.exit()
     return json_data
