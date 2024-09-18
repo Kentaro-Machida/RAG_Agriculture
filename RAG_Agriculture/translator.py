@@ -11,9 +11,6 @@ def translate_to_ja():
     posted_json = request.json
     keywords_dict = posted_json['keywords']
     question_lang = posted_json['lang']
-
-    # キーワードの結合して言語検出
-    joined_text = ', '.join(v for v in keywords_dict.values() if v and not v.isspace())
     
     print('Detected language: ', question_lang)
     
