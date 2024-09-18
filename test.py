@@ -137,12 +137,18 @@ if __name__ == '__main__':
     shutil.copy(generate_prompt_path, output_dir)
 
     # 各ファイルの内容を test() に通して処理
-    processed_data = {file_name: test(data, config) for file_name, data in file_contents.items()}
+    processed_data = {}
+
+    for file_name, data in file_contents.items():
+        try:
+            processed_data[file_name] = test(data, config)
+        except Exception as e:
+            print(f"Error processing {file_name}: {e}")
 
     # 得られた結果を評価し新たに追加
     gt_dir = output_dir.replace('output', 'GT')
     print('------ Evaluation ------')
-    processed_data = add_evaluation(gt_dir, processed_data)
+    processed_data = add_evaluation(gt_dir, processed_data, k=config['metrics_k'])
 
     # 処理されたデータを output ディレクトリに保存する
     save_processed_files(output_dir, processed_data)
