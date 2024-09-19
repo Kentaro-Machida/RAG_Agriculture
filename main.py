@@ -130,8 +130,9 @@ def test(question:str, config:dict)->dict:
         else:
             print(f"Error: {response.status_code}")
 
-    # Search the knowledge graph
+    # Search the database
     task_name_list = []
+    ids_list = []
     layer_list = []
     vector_searcher = vs.VectorSearcher(embedding_model, connection_name=config['weaviate']['schema']['class'])
     print("-------------------")
@@ -140,12 +141,14 @@ def test(question:str, config:dict)->dict:
     keywords_list = vector_searcher.search(keywords, n=search_num)
     for i, keywords in enumerate(keywords_list):
         task_name_list.append(keywords['task_name'])
+        ids_list.append(keywords['aao_id'])
         layer_list.append(count_layers(keywords))
         print(f"Search result {i+1}: {keywords['task_name']}")
         print(f"Number of layers: {count_layers(keywords)}")
 
-    process_log_dict['Search result: task_name_list'] = task_name_list
-    process_log_dict['Search result: layer_list'] = layer_list
+    process_log_dict['searched_task_name_list'] = task_name_list
+    process_log_dict['searched_ids_list'] = ids_list
+    process_log_dict['searched_layer_list'] = layer_list
 
     # Translate keywords back to the original language
     if lang != 'ja':
@@ -174,6 +177,7 @@ def test(question:str, config:dict)->dict:
     # Rerank
     if config['rerank_model']:
         reranked_task_name_list = []
+        reranked_ids_list = []
         reranked_layer_list = []
         reranked_scores = []
 
@@ -184,6 +188,7 @@ def test(question:str, config:dict)->dict:
         print("Reranked search results:")
         for i, result in enumerate(keywords_list):
             reranked_task_name_list.append(result['task_name'])
+            reranked_ids_list.append(result['aao_id'])
             reranked_layer_list.append(count_layers(result))
             reranked_scores.append(scores[i])
 
@@ -191,9 +196,10 @@ def test(question:str, config:dict)->dict:
             print(f"Score: {scores[i]}")
             print(f"Number of layers: {count_layers(result)}")
         
-        process_log_dict['Reranked search result: task_name_list'] = reranked_task_name_list
-        process_log_dict['Reranked search result: layer_list'] = reranked_layer_list
-        process_log_dict['Reranked search result: scores'] = reranked_scores
+        process_log_dict['reranked_task_name_list'] = reranked_task_name_list
+        process_log_dict['reranked_ids_list'] = reranked_ids_list
+        process_log_dict['reranked_layer_list'] = reranked_layer_list
+        process_log_dict['reranked_scores'] = reranked_scores
 
         keywords_list = keywords_list[:rerank_num]
 
