@@ -11,12 +11,12 @@ def detect_language(text:str)->str:
 def translate_to_japanese(keywords_dict:dict, src_lang:str)->dict:
     """他言語を日本語に翻訳する処理"""
     translator = Translator()
+    pass_keys = ['aao_id', 'agrovoc', 'naropedia']
     for k, v in keywords_dict.items():
+        if k in pass_keys:
+            continue
         try:
             if v and not v.isspace():
-                # URLの場合は翻訳しない
-                if v.startswith('http'):
-                    continue
                 v = translator.translate(v, src=src_lang, dest='ja').text
                 keywords_dict[k] = v
         except Exception as e:
@@ -28,12 +28,12 @@ def translate_to_japanese(keywords_dict:dict, src_lang:str)->dict:
 def translate_to_target_language(keywords_dict:dict, dest_lang:str)-> dict:
     """日本語を他言語に翻訳する処理"""
     translator = Translator()
+    pass_keys = ['aao_id', 'agrovoc', 'naropedia']
     for k, v in keywords_dict.items():
+        if k in pass_keys:
+            continue
         try:
             if v and not v.isspace():
-                # URLの場合は翻訳しない
-                if v.startswith('http'):
-                    continue
                 v = translator.translate(v, src='ja', dest=dest_lang).text
                 keywords_dict[k] = v
         except Exception as e:
@@ -51,6 +51,9 @@ if __name__ == '__main__':
         'keyword4': "https://met",
         'keyword5': '',
         'keyword6': ' ',
+        'aao_id': 'Hello',
+        'agrovoc': 'World',
+        'naropedia': '!'
     }
     lang = 'en'
 
@@ -58,6 +61,7 @@ if __name__ == '__main__':
     print("------Translate to Japanese.------")
     print(keywords)
     translated_keywords = translate_to_japanese(keywords, lang)
+    print(translated_keywords)
     
     print("------Translate from Japanese.------")
     re_translated_keywords = translate_to_target_language(translated_keywords, lang)
