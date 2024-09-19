@@ -69,7 +69,7 @@ def mapk(actual, predicted, k=10):
     return np.mean([apk(a,p,k) for a,p in zip(actual, predicted)])
 
 
-def ndcp_from_taskname(predicted_task_names:list[str], gt_task_names:list[str], k=20):
+def ndcg_from_taskname(predicted_task_names:list[str], gt_task_names:list[str], k=20):
     """
     predicted_task_names: 
         ランキングアルゴリズムによって予測されたタスク名のリスト
@@ -86,13 +86,14 @@ def ndcp_from_taskname(predicted_task_names:list[str], gt_task_names:list[str], 
         else:
             gt_list.append(0)
     gt_np_array = np.array([gt_list])
+    print(gt_np_array)
     pred_rank = [i for i in range(len(predicted_task_names), 0, -1)]
     pred_rank_np_array = np.array([pred_rank])
 
     return float(ndcg_score(gt_np_array, pred_rank_np_array, k=k))
 
 
-def mean_ndpc_from_taskname(predicted_task_names_list:list[list[str]], gt_task_names_list:list[list[str]], k=20):
+def mean_ndcg_from_taskname(predicted_task_names_list:list[list[str]], gt_task_names_list:list[list[str]], k=20):
     """
     predicted_task_names_list: 
         ランキングアルゴリズムによって予測されたタスク名のリストのリスト
@@ -102,7 +103,7 @@ def mean_ndpc_from_taskname(predicted_task_names_list:list[list[str]], gt_task_n
     k:
         上位k個についてNDGCを計算
     """
-    return np.mean([ndcp_from_taskname(predicted_task_names, gt_task_names, k) for predicted_task_names, gt_task_names in zip(predicted_task_names_list, gt_task_names_list)])
+    return np.mean([ndcg_from_taskname(predicted_task_names, gt_task_names, k) for predicted_task_names, gt_task_names in zip(predicted_task_names_list, gt_task_names_list)])
 
 
 def recall_k_from_taskname(predicted_task_names:list[str], gt_task_names:list[str], k=20):
@@ -138,7 +139,7 @@ def mrr(predicted_task_names:list[str], gt_task_names:list[str]):
 
 def all_metrics(predicted_task_names:list[str], gt_task_names:list[str], k=20):
     return {
-        f'ndcp@{k}': ndcp_from_taskname(predicted_task_names, gt_task_names, k),
+        f'ndcp@{k}': ndcg_from_taskname(predicted_task_names, gt_task_names, k),
         f'recall@{k}': recall_k_from_taskname(predicted_task_names, gt_task_names, k),
         'mrr': mrr(predicted_task_names, gt_task_names)
     }
@@ -148,21 +149,21 @@ if __name__ == '__main__':
     print('----- test1 -----')
     pred_task_names = ["task5", "task3", "task4", "task1", "task2", "task6", "task7", "task8", "task9", "task10"]
     gt_task_names = ["task1", "task2", "task3", "task100", "task10"]
-    print(ndcp_from_taskname(pred_task_names, gt_task_names, k=5))
+    print(ndcg_from_taskname(pred_task_names, gt_task_names, k=5))
     print(recall_k_from_taskname(pred_task_names, gt_task_names, k=5))
     print(mrr(pred_task_names, gt_task_names))
 
     print('----- test2 -----')
     pred_task_names = ["task1", "task3", "task4", "task5", "task2", "task6", "task7", "task8", "task9", "task10"]
     gt_task_names = ["task1", "task2", "task3", "task100", "task10"]
-    print(ndcp_from_taskname(pred_task_names, gt_task_names, k=5))
+    print(ndcg_from_taskname(pred_task_names, gt_task_names, k=5))
     print(recall_k_from_taskname(pred_task_names, gt_task_names, k=5))
     print(mrr(pred_task_names, gt_task_names))
 
     print('----- test3 -----')
     pred_task_names = ["task1", "task3", "task4", "task5", "task6", "task2", "task7", "task8", "task9", "task10"]
     gt_task_names = ["task1", "task2", "task3", "task100", "task10"]
-    print(ndcp_from_taskname(pred_task_names, gt_task_names, k=5))
+    print(ndcg_from_taskname(pred_task_names, gt_task_names, k=5))
     print(recall_k_from_taskname(pred_task_names, gt_task_names, k=5))
     print(mrr(pred_task_names, gt_task_names))
 
@@ -170,3 +171,81 @@ if __name__ == '__main__':
     pred_task_names = ["task1", "task3", "task4", "task5", "task6", "task2", "task7", "task8", "task9", "task10"]
     gt_task_names = ["task1", "task2", "task3", "task100", "task10"]
     print(all_metrics(pred_task_names, gt_task_names, k=5))
+
+    print('----- test5 -----')
+    pred_task_names = [
+        "A514",
+        "A531",
+        "A511",
+        "A510",
+        "A509",
+        "A503",
+        "A494",
+        "A512",
+        "A337",
+        "A513",
+        "A485",
+        "A 6",
+        "A62",
+        "A330",
+        "A294",
+        "A231",
+        "A303",
+        "A484",
+        "A470",
+        "A308",
+        "A293",
+        "A84",
+        "A134",
+        "A350",
+        "Sub -7",
+        "Sub -4",
+        "A358",
+        "A132",
+        "A327",
+        "A323"
+    ]
+    gt_task_names = [
+        "A514",
+        "A515",
+        "A516",
+        "A517",
+        "A518"
+    ]
+    print(all_metrics(pred_task_names, gt_task_names, k=10))
+
+    print('----- test6 -----')
+    pred_task_names = ["A16","A51"]
+    gt_task_names = [
+        "A46",
+        "A39",
+        "A40",
+        "A55",
+        "A477",
+        "A549",
+        "A41",
+        "A45",
+        "A44",
+        "A54",
+        "Sub -8",
+        "A43",
+        "A49",
+        "A48",
+        "Sub -7",
+        "A434",
+        "A101",
+        "Sub -4",
+        "A56",
+        "A443",
+        "A52",
+        "A110",
+        "A53",
+        "A330",
+        "A112",
+        "A92",
+        "A93",
+        "A80",
+        "A468",
+        "A109"
+    ]
+    print(all_metrics(pred_task_names, gt_task_names, k=10))
