@@ -35,7 +35,6 @@ def str2json(json_str:str)->dict:
         print('Error: Failed to convert string to json in str2json function in data_load.py')
         print(f'Error: {e}')
         print(f'json_str: {json_str}')
-        sys.exit()
     return json_data
 
 
