@@ -23,9 +23,9 @@
     "crop_example": "生産対象",
     "season": "時期",
     "condition": "作業条件",
-    "agrovoc": "AGROVOCへのリンク",
+    "agrovoc": "AGROVOCのID",
     "naropedia": "Neropediaへのリンク",
-    "wikipedia": "Wikipediaへのリンク"
+    "wikipedia": "Wikipediaでの記載名"
 }
 
 
@@ -43,9 +43,8 @@
 
 具体的な手順としては、種芋を直射日光が当たらない明るい場所に置き、数日から数週間にわたって光に晒します。この過程で、種芋が緑化し、芽がしっかりと伸びることで、畑に植える際により強い苗を得ることができます。
 
-AGROVOC URI: {適したリンク}
+AGROVOC Number: {適した番号}
 Naropedia URL: {適したリンク}
-Wikipedia URL: {適したリンク}
 
 ・検索結果に質問に関連する回答がなかった場合
 質問に回答する情報が含まれていない旨を説明してください

@@ -2,12 +2,13 @@ You are an excellent assistant skilled at extracting specific keywords from text
 
 The definition of the keywords is as follows:
 
-	•	task_name: the name of the agricultural task
-	•	purpose: the goal of the agricultural task
-	•	action: the action being performed
-	•	target: the object of the action
-	•	subtarget: the secondary object of the action
-	•	crop_example: the crop related to the agricultural task
+* task_name: the name of the agricultural task
+* purpose: the goal of the agricultural task
+* action: the action being performed
+* target: the object of the action
+* subtarget: the secondary object of the action
+* crop_example: the crop related to the agricultural task
+* others: other special keywords
 
 The output should be in JSON format, enclosed between <SOJ> and <EOJ>.
 
@@ -15,16 +16,16 @@ Example Input 1:
 What should I do to make potato seed tubers sprout more easily?
 
 Example Output 1:
-{“task_name”: “”,“purpose”: “promote sprouting”, “action”: “”, “target”: “seed tubers”, “subtarget”: “”, “crop_example”: “potato”}
+<SOJ>{"task_name": "", "purpose": "Promote germination", "action": "", "target": "Seed potatoes", "subtarget": "", "crop_example": "Potatoes", "others": "Field"}<EOJ>
 
 Example Input 2:
-I want to increase the number of olive plants I’m growing at home. What should I do?
+I want to control the large amount of weeds growing in apple orchards or other fruit orchards, what should I do?
 
 Example Output 2:
-{“task_name”: “”, “purpose”: “vegetative propagation”, “action”: “”, “target”: “”, “subtarget”: “”, “crop_example”: “olive”}
+<SOJ>{"task_name": "Weed control", "purpose": "", "action": "", "target": "Weeds", "subtarget": "", "crop_example": "Apple", "others": "Fruit orchard"}<EOJ>
 
 Example Input 3:
 What is the installation of pest traps, and what is its purpose?
 
 Example Output 3:
-{“task_name”: “installation of pest traps”, “purpose”: “”, “action”: “install”, “target”: “pest traps”, “subtarget”: “”, “crop_example”: “”}
+{“task_name”: “installation of pest traps”, “purpose”: “”, “action”: “install”, “target”: “pest traps”, “subtarget”: “”, “crop_example”: “”, "others": ""}

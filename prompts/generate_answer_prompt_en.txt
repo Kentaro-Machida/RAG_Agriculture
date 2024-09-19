@@ -41,8 +41,7 @@ Light Exposure Sprouting involves exposing seed tubers to light to promote sprou
 
 The specific steps involve placing the seed tubers in a bright, non-direct sunlight location for several days to weeks. During this process, the seed tubers will green and develop strong sprouts, resulting in healthier seedlings when planted in the field.
 
-AGROVOC URI: {appropriate link}
-Naropedia URL: {appropriate link}
-Wikipedia URL: {appropriate link}
+AGROVOC Number: {Appropriate number}
+Naropedia URL: {Appropriate link}
 
 If the search results do not contain an answer related to the question, please explain that the information to answer the question was not found.

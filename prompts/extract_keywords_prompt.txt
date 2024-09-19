@@ -18,11 +18,13 @@
 <SOJ>{"task_name": "","purpose": "発芽促進", "action": "", "target": "種芋", "subtarget": "", "crop_example": "ジャガイモ", "others": "畑"}<EOJ>
 
 入力例2:
-今畑で育てているオリーブを増やしたいのですが、何をしたら良いですか？
+りんご園などの果樹園に生えている大量の雑草を抑えたいのですがどうしたら良いですか？
 
 出力例2:
-<SOJ>{"task_name": "", "purpose": "栄養繁殖", "action": "", "target": "", "subtarget": "", "crop_example": "オリーブ", "others": "畑"}<EOJ>
+<SOJ>{"task_name": "雑草抑制", "purpose": "", "action": "", "target": "雑草", "subtarget": "", "crop_example": "りんご", "others": "果樹園"}<EOJ>
 
 入力例3:
 誘殺バンド取り付けとはなんですか？目的はなんですか？
-<SOJ>{"task_name": "誘殺バンド取り付け", "purpose": "", "action": "取り付ける", "target": "誘殺バンド", "subtarget": "", "crop_example": "", "others": "畑"}<EOJ>
+
+出力例3: 
+<SOJ>{"task_name": "誘殺バンド取り付け", "purpose": "", "action": "取り付ける", "target": "誘殺バンド", "subtarget": "", "crop_example": "", "others": ""}<EOJ>
