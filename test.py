@@ -7,18 +7,12 @@ Output: 回答ディレクトリを作成し、回答データおよび設定を
 
 import os
 import pandas as pd
-import sys
 import json
 import argparse
 import shutil
-from tqdm import tqdm
 from main import test
-import requests
-from RAG_Agriculture import answer_generator as ag, keywords_extractor as ke, vector_searcher as vs
-from RAG_Agriculture.utils.data_load import load_json, add_lang_to_promptpath
-from RAG_Agriculture.utils.text_preprocess import count_layers
-from RAG_Agriculture.utils.metrics import mean_ndpc_from_taskname, recall_k_from_taskname, mrr
-from langdetect import detect
+from RAG_Agriculture.utils.data_load import load_json
+from RAG_Agriculture.utils.metrics import ndcg_from_taskname, recall_k_from_taskname, mrr
 
 
 def parse_arguments():
@@ -78,15 +72,15 @@ def add_evaluation(gt_dir_path:str, processed_data:dict, k=20) -> dict:
     # 評価指標を計算し、データに追加
     for file_name, data in processed_data.items():
         try:
-            task_name_list = data['Search result: task_name_list']
+            ids_list = data['searched_ids_list']
             gt_path = os.path.join(gt_dir_path, file_name.replace('.txt', '.csv'))
-            gt_task = pd.read_csv(gt_path)['task_name'].tolist()
-            processed_data[file_name]['GT'] = gt_task
+            gt_ids = pd.read_csv(gt_path)['aao_id'].tolist()
+            processed_data[file_name]['GT'] = gt_ids
 
             # 評価指標を計算
-            ndcp = mean_ndpc_from_taskname(task_name_list, gt_task, k=k)
-            recall = recall_k_from_taskname(task_name_list, gt_task, k=k)
-            mrr_score = mrr(task_name_list, gt_task)
+            ndcp = ndcg_from_taskname(ids_list, gt_ids, k=k)
+            recall = recall_k_from_taskname(ids_list, gt_ids, k=k)
+            mrr_score = mrr(ids_list, gt_ids)
 
             # データに追加
             processed_data[file_name]['Evaluation'] = {
@@ -97,11 +91,11 @@ def add_evaluation(gt_dir_path:str, processed_data:dict, k=20) -> dict:
             print(processed_data[file_name]['Evaluation'])
         
             # "Reranked search result: task_name_list"がdataにkeyとして含まれている場合のみの処理
-            if 'Reranked search result: task_name_list' in data:
-                reranked_task_name_list = data['Reranked search result: task_name_list']
-                ndcp = mean_ndpc_from_taskname(reranked_task_name_list, gt_task)
-                recall = recall_k_from_taskname(reranked_task_name_list, gt_task)
-                mrr_score = mrr(reranked_task_name_list, gt_task)
+            if 'reranked_ids_list' in data:
+                reranked_ids_list = data['reranked_ids_list']
+                ndcp = ndcg_from_taskname(reranked_ids_list, gt_ids, k=k)
+                recall = recall_k_from_taskname(reranked_ids_list, gt_ids, k=k)
+                mrr_score = mrr(reranked_ids_list, gt_ids)
                 processed_data[file_name]['Reranked_Evaluation'] = {
                     f'reranked_ndcp@{k}': ndcp,
                     f'reranked_recall@{k}': recall,
