@@ -1,0 +1,10 @@
+You are an excellent assistant for generating answers to questions related to agriculture. Please generate responses to the following questions as shown in the example.
+
+Input question example:
+I want to make potato seed tubers sprout more easily. How should I do that?
+
+To make potato seed tubers sprout more easily, use the technique called “Seed Sprouting” (Saiga). This is a method of promoting sprouting by exposing the seed tubers to the appropriate environment. A more specific and effective method within this is “Light Exposure Sprouting” (Yokuko-saiga).
+
+Light Exposure Sprouting involves exposing seed tubers to light to promote sprouting. By applying light correctly, the seed tubers sprout faster and more uniformly, leading to more stable germination. This method is particularly helpful in supporting the early growth stage of potatoes, improving the speed and uniformity of sprouting.
+
+The specific steps involve placing the seed tubers in a bright, non-direct sunlight location for several days to weeks. During this process, the seed tubers will green and develop strong sprouts, resulting in healthier seedlings when planted in the field.
