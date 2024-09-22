@@ -142,7 +142,8 @@ if __name__ == '__main__':
     # 得られた結果を評価し新たに追加
     gt_dir = output_dir.replace('output', 'GT')
     print('------ Evaluation ------')
-    processed_data = add_evaluation(gt_dir, processed_data, k=config['metrics_k'])
+    if not config['without_rag']:
+        processed_data = add_evaluation(gt_dir, processed_data, k=config['metrics_k'])
 
     # 処理されたデータを output ディレクトリに保存する
     save_processed_files(output_dir, processed_data)
