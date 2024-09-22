@@ -94,6 +94,8 @@ def test(question:str, config:dict)->dict:
     print("-------------------")
     print("Question:", question)
     print("Language:", lang)
+    print(f"Extractor prompt path: {extract_keywords_prompt_path}")
+    print(f"Answer generator prompt path: {generate_answer_prompt_path}")
 
     # Without RAG
     if config['without_rag']:
