@@ -10,7 +10,7 @@ from weaviate.util import generate_uuid5
 import pandas as pd
 
 from RAG_Agriculture.utils.data_load import load_json
-from RAG_Agriculture.utils.text_preprocess import mE5_preprocess, mE5_preprocess_instruct
+from RAG_Agriculture.utils.text_preprocess import mE5_preprocess
 from RAG_Agriculture.utils.embedding_process import text_embedding
 
 
