@@ -162,7 +162,13 @@ cython_debug/
 #.idea/
 
 # custom
-datasets/
+datasets/aao_mini_sample.csv
+datasets/aao_mini_sample.ttl
+datasets/aao_ver_4_05_turtle_utf8.ttl
+datasets/aao_ver_4_05.ttl
+datasets/cvo_ver_3_12_turtle_utf8.ttl
+datasets/cvo_ver_3_12.csv
+datasets/cvo_ver_3_12.ttl
 tests/
 playgraunds/
 config_backup.json

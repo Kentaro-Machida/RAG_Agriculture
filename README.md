@@ -84,15 +84,16 @@ Retrieval augmented generation using LLM for Agriculture knowledge graph for Jap
 ```
 それぞれのモデルの選択肢は以下の通り。
 * retrieve_llm: gpt-3.5-turbo, gpt-4o
-* embedding_model: openai（行が多すぎるとリクエスト制限に引っかかる）, intfloat/multilingual-e5-large
+* embedding_model: intfloat/multilingual-e5-large
 * generate_llm: gpt-3.5-turbo, gpt-4o
+* rerank_model: Alibaba-NLP/gte-multilingual-reranker-base
 
 ### 使用するLLMやシステム全体の設定
 * retrieve_llm:質問からキーワードを抽出するためのLLM（例: "gpt-3.5-turbo", "gpt-4o"）。
 * extract_keywords_prompt_path:キーワード抽出用LLMのプロンプトファイルのパス。
 * generate_llm:解答生成に使用するLLM（例: "gpt-3.5-turbo", "gpt-4o"）。
 * generate_answer_prompt_path:解答生成用プロンプトファイルのパス。
-* embedding_model:埋め込みモデル（例: "openai"）。
+* embedding_model:埋め込みモデル（現在は"intfloat/multilingual-e5-large"のみ）。
 * rerank_model:リランクに使用するモデル
 * search_num:ベクトル検索で取得するオブジェクト数（例: 30）。
 * rerank_num: リランクした後Generatorに渡すキーワードの数。search_numより少ない必要がある(例: 10)。
@@ -115,6 +116,28 @@ Retrieval augmented generation using LLM for Agriculture knowledge graph for Jap
 * vectorizer:使用するベクトル化モジュール（例: "text2vec-openai"）。
 * properties:コレクションのプロパティ設定（例: "task_name", "purpose"）。
 
+## 環境構築
+このシステムを動かすためには、以下の3つのプロセスを動かしておく必要がある。
+これはgoogletransの要求するライブラリのバージョンがコンフリクトを起こすためである。
+1. RAGシステム本体(requirements.txt)
+2. googletrans を使用するためのプロセス(requirements_trans.txt)
+3. Weaviate によるベクトルDBのプロセス(docker-compose.yml)
+
+### RAG本体
+RAGシステム本体のライブラリは以下のコマンドで仮想環境にインストール
+```
+pip install -r requirements.txt
+```
+
+### Translator
+続いて別の仮想環境を作成し、以下のコマンドで Translator用のライブラリをインストール
+```
+pip install -r requirements_trans.txt
+```
+
+### Weaviate
+docker の環境構築を行い、dockerコマンドを使用できるようにしておく。
+
 ## 使い方
 全てベースディレクトリ（このREADME.md と同じディレクトリ）からの実行を前提とする。
 農作業オントロジーとLLMを使用した対話システムを使用するいは以下の流れで進めていく。
@@ -134,18 +157,15 @@ docker compose up
 ```
 
 ### 農作業オントロジーデータをベクトルDBにセット
-以下のコマンドで、csv形式の農作業オントロジーデータをベクトルDBにセットする。OpenAIの埋め込みモデルを使用する場合は以下のスクリプトを実行。
-```
-python prepare_vector_db.py
-```
-
-Hugging face で公開されているOSS埋め込みモデルを使用する際は以下のスクリプトを実行。
+Hugging face で公開されているOSS埋め込みモデルを使用する際は以下のスクリプトを実行。 
+デフォルトでは./datasets/aao_ver_4_05.csvという農作業オントロジーのデータがベクトルDBにセットされる。
 ```
 python prepare_vector_db_oss.py
 ```
 
 ### translatorの起動
-日本語以外での検索を可能にするためのtranslaatorを起動する必要がある。以下のコマンドでflaskによるサーバーが立ち上がる。中身は、googletransという無料の翻訳機。
+日本語以外での検索を可能にするためのtranslaatorを起動する必要がある。以下のコマンドでflaskによるサーバーが立ち上がる。中身は、googletransという無料の翻訳機。 
+以下のコマンドは、googletrans用の仮想環境(requirements_trans.txt)下で実行することに注意。
 ```
 python RAG_Agriculture/translator.py
 ```
@@ -199,10 +219,12 @@ RAG_Agriculuture ディレクトリの中にモジュールが格納されてい
 
 ### extract_keywords_prompt.txt
 質問を入力とし、そこからキーワードを抽出するLLMのためのプロンプト。
-日本語で書かれている。
+日本語で書かれている。もし、Keywords_extractor の初期プロンプトを変えたい場合は、
+このファイルを書き換える。
 
 ### generate_answer_prompt.txt
-RAGにより検索して返ってきたドキュメントに加えて、回答生成用のLLMに与えるためのプロンプト。日本語で書かれている。
+RAGにより検索して返ってきたドキュメントに加えて、回答生成用のLLMに与えるためのプロンプト。日本語で書かれている。  
+もし、Generator の初期プロンプトを変更したい場合はこのテキストファイルを書き換える。
 
 ### extract_keywords_prompt_{language}.txt, generate_answer_prompt_{language}.txt
 上記2プロンプトの日本語以外のもの。
